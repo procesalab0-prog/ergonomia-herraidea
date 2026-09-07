@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ergonomía Ocupacional en Herraidea</title>
+<meta name="description" content="Diagnóstico ergonómico del taller metalmecánico Herraidea y propuesta de rediseño de sus estaciones de trabajo." />
+<meta name="theme-color" content="#101215" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&amp;family=Barlow:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #101215; color: #FAFBFD; font-family: Barlow, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #E10600; text-decoration: none; }
+  a:hover { color: #AA0003; }
+  ::selection { background: #AA0003; color: #FAFBFD; }
+  @keyframes hd-rise { from { opacity: 0; transform: translateY(46px); } to { opacity: 1; transform: none; } }
+  @keyframes hd-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes hd-drop { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+  @keyframes hd-cue { 0%, 100% { transform: translateY(0); opacity: .35; } 50% { transform: translateY(10px); opacity: 1; } }
+  @keyframes hd-zoom { from { transform: scale(1.16); } to { transform: scale(1.04); } }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #101215; }
+  ::-webkit-scrollbar-thumb { background: #3A3E44; }
+  :focus-visible { outline: 3px solid #E10600; outline-offset: 4px; }
+  @media (max-width: 720px) {
+    #hd-nav { padding-left: 18px !important; padding-right: 18px !important; gap: 14px !important; }
+    #hd-nav > a span { display: none; }
+    #hd-links { padding-left: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div style="background:#101215;overflow-x:hidden">
+
+  <div id="hd-progress" style="position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,#AA0003,#E10600);z-index:60;transition:width .12s linear"></div>
+
+  <header id="hd-nav" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:24px;padding:20px 32px;background:rgba(16,18,21,0);backdrop-filter:blur(0px);border-bottom:1px solid rgba(250,251,253,0);transition:background .45s ease,padding .45s ease,border-color .45s ease,backdrop-filter .45s ease">
+    <a href="#inicio" style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+      <img src="assets/logo-herraidea.png" alt="Herraidea" style="height:26px;width:auto;filter:brightness(0) invert(1)" />
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;color:#8C9096;text-transform:uppercase;border-left:1px solid #35393F;padding-left:12px">Ergonomía<br />Ocupacional</span>
+    </a>
+    <nav id="hd-links" style="display:flex;align-items:center;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none;min-width:0;mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 34px),transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 34px),transparent 100%)">
+      <a href="#empresa" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Empresa</a>
+      <a href="#area" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Área</a>
+      <a href="#fisica" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Física</a>
+      <a href="#cognitiva" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Cognitiva</a>
+      <a href="#organizacional" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Organizacional</a>
+      <a href="#antropometria" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Antropometría</a>
+      <a href="#normatividad" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Normatividad</a>
+      <a href="#evidencias" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;padding:8px 11px;border-radius:2px;white-space:nowrap;transition:color .25s,background .25s" style-hover="color:#FAFBFD;background:#AA0003">Evidencias</a>
+      <a href="#propuestas" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#FAFBFD;background:#AA0003;padding:8px 13px;border-radius:2px;white-space:nowrap;transition:background .25s,transform .25s" style-hover="background:#E10600;transform:translateY(-1px)">Propuestas</a>
+    </nav>
+  </header>
+
+  <section id="inicio" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;padding:120px 32px 56px">
+    <div id="hd-hero-bg" style="position:absolute;inset:-8% -4%;background-image:url('assets/haas-cnc.webp');background-size:cover;background-position:58% 42%;animation:hd-zoom 2.6s cubic-bezier(.16,1,.3,1) both;will-change:transform"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,18,21,.86) 0%,rgba(16,18,21,.42) 34%,rgba(16,18,21,.78) 72%,#101215 100%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 82% 18%,rgba(170,0,3,.34),transparent 58%)"></div>
+
+    <div style="position:relative;max-width:1240px;margin:0 auto;width:100%">
+      <div style="display:flex;align-items:center;gap:14px;animation:hd-drop 1s .3s cubic-bezier(.16,1,.3,1) both">
+        <span style="display:block;width:52px;height:3px;background:#E10600"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#FAFBFD">Avance de proyecto · Septiembre 2026</span>
+      </div>
+      <h1 style="font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(44px,8.4vw,132px);line-height:.9;letter-spacing:-.035em;text-transform:uppercase;margin:22px 0 0;color:#FAFBFD;text-wrap:balance;animation:hd-rise 1.15s .42s cubic-bezier(.16,1,.3,1) both">Ergonomía<br />ocupacional en<br /><span style="color:#E10600">Herraidea</span></h1>
+      <p style="max-width:640px;font-size:clamp(16px,1.5vw,21px);line-height:1.5;color:#D6D9DD;margin:26px 0 0;animation:hd-rise 1.15s .58s cubic-bezier(.16,1,.3,1) both">Diagnóstico ergonómico de un taller metalmecánico de alta precisión en León, Guanajuato, y propuesta de rediseño de sus estaciones de trabajo.</p>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;margin-top:38px;padding-top:24px;border-top:1px solid rgba(250,251,253,.16);animation:hd-rise 1.1s .72s cubic-bezier(.16,1,.3,1) both">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9DA2A8">Universidad La Salle Bajío</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9DA2A8">Dra. Elsa Villagrán Escamilla</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9DA2A8">Ergonomía Ocupacional</span>
+        <a href="#propuestas" style="display:inline-flex;align-items:center;gap:10px;margin-left:auto;font-family:Archivo,sans-serif;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#FAFBFD;background:#AA0003;padding:14px 22px;transition:background .3s,gap .3s,box-shadow .3s" style-hover="background:#E10600;gap:16px;box-shadow:0 12px 34px rgba(225,6,0,.4)">Ver antes / después <span style="font-size:15px">›</span></a>
+      </div>
+    </div>
+    <div style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#8C9096;animation:hd-cue 2.4s 1.4s ease-in-out infinite">Scroll</div>
+  </section>
+
+  <section data-screen-label="Introducción" style="position:relative;background:#FAFBFD;color:#22262B;padding:clamp(72px,10vw,140px) 32px">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,5vw,72px);align-items:start">
+      <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#AA0003">01 — Introducción</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(30px,3.6vw,52px);line-height:1.02;letter-spacing:-.028em;text-transform:uppercase;margin:18px 0 0;color:#1A1C1F;text-wrap:balance">Adaptar el trabajo a la persona, no la persona a la máquina</h2>
+        <div style="width:64px;height:4px;background:#E10600;margin-top:26px"></div>
+      </div>
+      <div data-reveal="" data-delay="160" style="opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)">
+        <p style="font-size:clamp(16px,1.35vw,19px);line-height:1.68;color:#3D4247;margin:0;text-wrap:pretty">Este trabajo presenta la evaluación y el diagnóstico ergonómico de la empresa <strong style="color:#1A1C1F">Herraidea</strong>, ubicada en León, Guanajuato, dedicada a la fabricación y maquinado de componentes metálicos de alta precisión.</p>
+        <p style="font-size:clamp(15px,1.25vw,17px);line-height:1.7;color:#5B6167;margin:20px 0 0;text-wrap:pretty">A partir de los principios de ergonomía física, cognitiva y organizacional, junto con la antropometría y la normatividad mexicana e internacional (ISO 26800 e ISO 6385), se analizan los puestos de trabajo del taller para identificar riesgos musculoesqueléticos, cargas de trabajo y oportunidades de mejora continua que favorezcan la salud, la seguridad y la productividad operativa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="empresa" data-screen-label="La empresa" style="position:relative;background:#FAFBFD;color:#22262B;padding:0 32px clamp(72px,10vw,140px)">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;border-top:1px solid #DDE1E5;padding-top:34px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#AA0003">02 — La empresa</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,3.2vw,46px);line-height:1;letter-spacing:-.028em;text-transform:uppercase;margin:0;color:#1A1C1F">Metalmecánica de precisión</h2>
+      </div>
+
+      <div data-reveal="" data-delay="80" style="opacity:0;transform:translateY(36px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1);margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(20px,3vw,48px);align-items:start">
+        <p style="font-family:Archivo,sans-serif;font-weight:700;font-size:clamp(19px,2.1vw,28px);line-height:1.25;letter-spacing:-.015em;color:#1A1C1F;margin:0;text-wrap:balance;border-left:4px solid #E10600;padding-left:20px">Herraidea es una empresa enfocada en soluciones para cada proyecto, no solamente en la venta de herrajes estándar.</p>
+        <p style="font-size:clamp(16px,1.35vw,18px);line-height:1.68;color:#5B6167;margin:0;text-wrap:pretty">Cuenta con centros de maquinado y capacidad de fabricación propia, por lo que puede diseñar y fabricar herrajes en <strong style="color:#1A1C1F">medidas especiales</strong> de acuerdo con planos, fotografías, dibujos, muestras o necesidades específicas del cliente.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px;margin-top:44px">
+        <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;border-top:3px solid #AA0003;padding:30px;transition:transform .4s,box-shadow .4s" style-hover="transform:translateY(-6px);box-shadow:0 22px 48px rgba(26,28,31,.12)">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:0;color:#1A1C1F">Giro y actividad</h3>
+          <p style="font-size:16px;line-height:1.62;color:#5B6167;margin:14px 0 0;text-wrap:pretty">Sector metalmecánico: manufactura de piezas mecánicas, maquinados CNC (torno y fresado en centros verticales), corte láser de lámina, ajuste de banco y ensamble.</p>
+        </div>
+        <div data-reveal="" data-delay="110" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;border-top:3px solid #6D6E71;padding:30px" style-hover="transform:translateY(-6px);box-shadow:0 22px 48px rgba(26,28,31,.12)">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:0;color:#1A1C1F">Productos y servicios</h3>
+          <p style="font-size:16px;line-height:1.62;color:#5B6167;margin:14px 0 0;text-wrap:pretty">Componentes metálicos industrializados y maquinados de precisión —barras, flechas y piezas cilíndricas— además de placas y perfiles cortados por láser.</p>
+        </div>
+        <div data-reveal="" data-delay="220" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);background:#1A1C1F;border-top:3px solid #E10600;padding:30px;color:#FAFBFD">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:0;color:#FAFBFD">Áreas de trabajo</h3>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+            <span style="font-size:15px;line-height:1.4;color:#D6D9DD;border-bottom:1px solid #2C3035;padding-bottom:9px">Maquinado CNC — centros verticales Haas y tornos CNC</span>
+            <span style="font-size:15px;line-height:1.4;color:#D6D9DD;border-bottom:1px solid #2C3035;padding-bottom:9px">Corte láser de lámina</span>
+            <span style="font-size:15px;line-height:1.4;color:#D6D9DD;border-bottom:1px solid #2C3035;padding-bottom:9px">Banco / ajuste y rebarbado</span>
+            <span style="font-size:15px;line-height:1.4;color:#D6D9DD;border-bottom:1px solid #2C3035;padding-bottom:9px">Almacén y manejo de materiales</span>
+            <span style="font-size:15px;line-height:1.4;color:#D6D9DD">Administración y diseño CAD/CAM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="position:relative;height:clamp(300px,52vh,560px);overflow:hidden;background:#101215">
+    <div id="hd-band-1" style="position:absolute;inset:-14% 0;background-image:url('assets/empaque.webp');background-size:cover;background-position:50% 55%;will-change:transform"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,18,21,.9),rgba(16,18,21,.25) 65%,rgba(170,0,3,.35))"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:36px 32px">
+      <div style="max-width:1240px;margin:0 auto;width:100%">
+        <p data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(22px,3.4vw,46px);line-height:1.05;letter-spacing:-.02em;text-transform:uppercase;color:#FAFBFD;margin:0;max-width:900px">Hecho en México · Herrajes inoxidables y componentes maquinados</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="area" data-screen-label="Área de estudio" style="position:relative;background:#101215;padding:clamp(72px,10vw,140px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <span data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E10600">03 — Selección del área de estudio</span>
+      <h2 data-reveal="" data-delay="90" style="opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(34px,6vw,86px);line-height:.95;letter-spacing:-.032em;text-transform:uppercase;margin:20px 0 0;color:#FAFBFD;max-width:15ch">Maquinado CNC y banco de trabajo</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:36px;margin-top:48px;align-items:start">
+        <p data-reveal="" data-delay="160" style="opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);font-size:clamp(16px,1.35vw,19px);line-height:1.68;color:#C3C7CC;margin:0;text-wrap:pretty">En la observación de las operaciones del taller se evidencia la manipulación constante de barras y piezas metálicas pesadas, la carga manual hacia prensas y morsas en los centros de maquinado Haas, posturas de bipedestación prolongada con inclinación del tronco y movimientos repetitivos durante la sujeción de herramientas y el rebarbado.</p>
+        <p data-reveal="" data-delay="240" style="opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);font-size:clamp(16px,1.35vw,19px);line-height:1.68;color:#C3C7CC;margin:0;text-wrap:pretty">El área requiere un análisis detallado para prevenir <strong style="color:#FAFBFD">lesiones dorsolumbares</strong> y <strong style="color:#FAFBFD">desórdenes musculoesqueléticos</strong> en las extremidades superiores.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="fisica" data-screen-label="Ergonomía física" style="position:relative;background:#FAFBFD;color:#22262B;padding:clamp(72px,10vw,130px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#AA0003">04 — Ergonomía física</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,48px);line-height:1;letter-spacing:-.028em;text-transform:uppercase;margin:0;color:#1A1C1F">El cuerpo en la estación</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px;margin-top:44px">
+        <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;padding:28px;position:relative;overflow:hidden" style-hover="border-color:#AA0003;transform:translateY(-5px)">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#AA0003;letter-spacing:.2em">01</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;letter-spacing:.02em;margin:10px 0 0;color:#1A1C1F">Posturas de trabajo</h3>
+          <p style="font-size:15px;line-height:1.6;color:#5B6167;margin:12px 0 0;text-wrap:pretty">Bipedestación prolongada con inclinaciones del tronco al colocar piezas pesadas en el centro de maquinado Haas y en los tornos.</p>
+        </div>
+        <div data-reveal="" data-delay="90" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;padding:28px" style-hover="border-color:#AA0003;transform:translateY(-5px)">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#AA0003;letter-spacing:.2em">02</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;margin:10px 0 0;color:#1A1C1F">Manipulación manual de cargas</h3>
+          <p style="font-size:15px;line-height:1.6;color:#5B6167;margin:12px 0 0;text-wrap:pretty">Levantamiento manual de barras sólidas metálicas y estiba en contenedores inferiores, sin equipos de asistencia para la carga.</p>
+        </div>
+        <div data-reveal="" data-delay="180" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;padding:28px" style-hover="border-color:#AA0003;transform:translateY(-5px)">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#AA0003;letter-spacing:.2em">03</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;margin:10px 0 0;color:#1A1C1F">Repetitividad de movimientos</h3>
+          <p style="font-size:15px;line-height:1.6;color:#5B6167;margin:12px 0 0;text-wrap:pretty">Accionamiento constante de palancas en tornillos de banco, limpieza con aire comprimido, carga/descarga repetitiva y contacto continuo contra la rueda abrasiva en pulido.</p>
+        </div>
+        <div data-reveal="" data-delay="270" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;padding:28px" style-hover="border-color:#AA0003;transform:translateY(-5px)">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#AA0003;letter-spacing:.2em">04</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;margin:10px 0 0;color:#1A1C1F">Herramientas y estaciones</h3>
+          <p style="font-size:15px;line-height:1.6;color:#5B6167;margin:12px 0 0;text-wrap:pretty">Tapetes antifatiga en las estaciones principales; llaves manuales, pistolas neumáticas y un brazo articulado FlexArm para roscado montado en el banco.</p>
+        </div>
+        <div data-reveal="" data-delay="360" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#1A1C1F;padding:28px;grid-column:span 2;min-width:0" style-hover="transform:translateY(-5px)">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#E10600;letter-spacing:.2em">05 — Mapa de riesgo</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;margin:10px 0 0;color:#FAFBFD">Trastornos musculoesqueléticos potenciales</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:24px;align-items:center;margin-top:18px">
+            <div style="display:flex;justify-content:center">
+              <img src="assets/mapa-tme.webp" alt="Mapa corporal de zonas de riesgo: hombros, zona lumbar y muñecas" style="width:100%;max-width:190px;height:auto;display:block" />
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+              <div style="border-left:3px solid #E10600;padding-left:14px">
+                <span style="display:block;font-family:Archivo,sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#FAFBFD">Hombros</span>
+                <span style="font-size:14px;line-height:1.5;color:#9DA2A8">Tendinitis por abducción y elevación repetida en el ajuste sobre la morsa.</span>
+              </div>
+              <div style="border-left:3px solid #E10600;padding-left:14px">
+                <span style="display:block;font-family:Archivo,sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#FAFBFD">Zona lumbar</span>
+                <span style="font-size:14px;line-height:1.5;color:#9DA2A8">Lumbalgia por sobreesfuerzo en el levantamiento de barras y la flexión de tronco.</span>
+              </div>
+              <div style="border-left:3px solid #E10600;padding-left:14px">
+                <span style="display:block;font-family:Archivo,sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#FAFBFD">Muñecas</span>
+                <span style="font-size:14px;line-height:1.5;color:#9DA2A8">Tendinitis por accionamiento de palancas, apriete y rebarbado repetitivo.</span>
+              </div>
+              <div style="border-left:3px solid #6D6E71;padding-left:14px">
+                <span style="display:block;font-family:Archivo,sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#FAFBFD">Miembros inferiores</span>
+                <span style="font-size:14px;line-height:1.5;color:#9DA2A8">Fatiga por bipedestación prolongada durante el turno.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cognitiva" data-screen-label="Ergonomía cognitiva" style="position:relative;background:#15181B;padding:clamp(72px,10vw,130px) 32px;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(90% 70% at 15% 0%,rgba(170,0,3,.22),transparent 60%)"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E10600">05 — Ergonomía cognitiva</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,48px);line-height:1;letter-spacing:-.028em;text-transform:uppercase;margin:0;color:#FAFBFD">La mente frente al panel</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1px;margin-top:44px;background:#2C3035;border:1px solid #2C3035">
+        <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#101215;padding:30px" style-hover="background:#1D2126">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#E10600">Carga mental</h3>
+          <p style="font-size:15px;line-height:1.62;color:#C3C7CC;margin:12px 0 0;text-wrap:pretty">Monitoreo visual constante de las trayectorias de herramienta y de los parámetros de corte (código G) en los paneles CNC.</p>
+        </div>
+        <div data-reveal="" data-delay="90" style="opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#101215;padding:30px" style-hover="background:#1D2126">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#E10600">Atención sostenida</h3>
+          <p style="font-size:15px;line-height:1.62;color:#C3C7CC;margin:12px 0 0;text-wrap:pretty">Supervisión visual del corte láser para prevenir colisiones o fallas en el material.</p>
+        </div>
+        <div data-reveal="" data-delay="180" style="opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#101215;padding:30px" style-hover="background:#1D2126">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#E10600">Interfaces hombre-máquina</h3>
+          <p style="font-size:15px;line-height:1.62;color:#C3C7CC;margin:12px 0 0;text-wrap:pretty">Paneles de control Haas con botones mecánicos e indicación de paro de emergencia.</p>
+        </div>
+        <div data-reveal="" data-delay="270" style="opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#101215;padding:30px" style-hover="background:#1D2126">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#E10600">Vigilancia y automatización</h3>
+          <p style="font-size:15px;line-height:1.62;color:#C3C7CC;margin:12px 0 0;text-wrap:pretty">Riesgo de fatiga mental o distracción durante los ciclos largos de corte automatizado, que afecta el tiempo de respuesta ante alertas o averías.</p>
+        </div>
+        <div data-reveal="" data-delay="360" style="opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#101215;padding:30px;border-left:3px solid #AA0003" style-hover="background:#1D2126">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#E10600">Toma de decisiones</h3>
+          <p style="font-size:15px;line-height:1.62;color:#C3C7CC;margin:12px 0 0;text-wrap:pretty">El operador decide en tiempo real si continuar, pausar o detener el ciclo ante vibraciones anómalas o alertas del centro Haas. Exige criterio técnico bajo presión de tiempo; una carga mental elevada puede derivar en decisiones tardías o errores de operación.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="organizacional" data-screen-label="Ergonomía organizacional" style="position:relative;background:#FAFBFD;color:#22262B;padding:clamp(72px,10vw,130px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#AA0003">06 — Ergonomía organizacional</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,48px);line-height:1;letter-spacing:-.028em;text-transform:uppercase;margin:0;color:#1A1C1F">Cómo se organiza el turno</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;margin-top:40px;border-top:1px solid #DDE1E5">
+        <div data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px 40px;padding:26px 0;border-bottom:1px solid #DDE1E5;transition:background .3s,padding-left .3s" style-hover="background:#F0F2F5;padding-left:12px">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;margin:0;color:#1A1C1F">Diseño del trabajo</h3>
+          <p style="font-size:16px;line-height:1.62;color:#5B6167;margin:0;grid-column:span 2;min-width:0;text-wrap:pretty">Tareas divididas en preparación de material, montaje, ajuste manual y maquinado automatizado.</p>
+        </div>
+        <div data-reveal="" data-delay="70" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px 40px;padding:26px 0;border-bottom:1px solid #DDE1E5" style-hover="background:#F0F2F5;padding-left:12px">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;margin:0;color:#1A1C1F">Turnos y descansos</h3>
+          <p style="font-size:16px;line-height:1.62;color:#5B6167;margin:0;grid-column:span 2;min-width:0;text-wrap:pretty">Turnos continuos de taller, con ventiladores industriales de pedestal y extractores de muro para mitigar el estrés térmico en el piso de producción.</p>
+        </div>
+        <div data-reveal="" data-delay="140" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px 40px;padding:26px 0;border-bottom:1px solid #DDE1E5" style-hover="background:#F0F2F5;padding-left:12px">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;margin:0;color:#1A1C1F">Equipo y comunicación</h3>
+          <p style="font-size:16px;line-height:1.62;color:#5B6167;margin:0;grid-column:span 2;min-width:0;text-wrap:pretty">Coordinación directa entre operadores de CNC, preparadores y personal de logística del taller.</p>
+        </div>
+        <div data-reveal="" data-delay="210" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px 40px;padding:26px 0;border-bottom:1px solid #DDE1E5" style-hover="background:#F0F2F5;padding-left:12px">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;margin:0;color:#1A1C1F">Cultura de seguridad</h3>
+          <div style="grid-column:span 2;min-width:0;display:flex;flex-wrap:wrap;gap:8px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#1A1C1F;border:1px solid #C9CED4;padding:7px 12px">Lentes de protección</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#1A1C1F;border:1px solid #C9CED4;padding:7px 12px">Orejeras en corte láser</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#1A1C1F;border:1px solid #C9CED4;padding:7px 12px">Calzado de seguridad</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#1A1C1F;border:1px solid #C9CED4;padding:7px 12px">Tapetes antifatiga</span>
+          </div>
+        </div>
+        <div data-reveal="" data-delay="280" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px 40px;padding:26px 0;border-bottom:1px solid #DDE1E5;background:#FFFFFF;border-left:3px solid #AA0003;padding-left:20px" style-hover="background:#F0F2F5">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;margin:0;color:#1A1C1F">Relación con el desempeño</h3>
+          <p style="font-size:16px;line-height:1.62;color:#3D4247;margin:0;grid-column:span 2;min-width:0;text-wrap:pretty">La cultura de seguridad consolidada sostiene la operación, pero la falta de rotación de tareas en el banco de ajuste y rebarbado puede generar fatiga acumulada hacia el final del turno, incrementando el riesgo de errores de calidad y reduciendo la productividad por hora.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="antropometria" data-screen-label="Antropometría" style="position:relative;background:#101215;padding:clamp(72px,10vw,130px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E10600">07 — Antropometría</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(32px,4.6vw,66px);line-height:.98;letter-spacing:-.03em;text-transform:uppercase;margin:18px 0 0;color:#FAFBFD;max-width:22ch">La estación mide 15–20 cm de más</h2>
+      </div>
+      <div data-reveal="" data-delay="120" style="opacity:0;transform:translateY(44px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);margin-top:46px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+        <div style="background:#1A1C1F;padding:28px;display:flex;flex-direction:column">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">Referencia · Plano del codo</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(19px,2.1vw,26px);letter-spacing:-.015em;text-transform:uppercase;margin:10px 0 0;color:#FAFBFD">Banco a la altura del codo</h3>
+          <p style="font-size:15px;line-height:1.6;color:#C3C7CC;margin:12px 0 0;text-wrap:pretty">Con la superficie del banco a la altura del codo, el brazo trabaja pegado al cuerpo y el hombro permanece relajado: el plano óptimo de referencia para ISO 14738.</p>
+          <div style="margin-top:20px;flex:1;display:flex;align-items:flex-end;justify-content:center;min-height:300px;overflow:hidden">
+            <img src="assets/banco-plano-codo.webp" alt="Operador de pie junto a banco de trabajo a la altura del codo" style="width:100%;max-width:280px;height:auto;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-8px) scale(1.03)" />
+          </div>
+        </div>
+        <div style="background:#101215;padding:28px;border-left:3px solid #AA0003;display:flex;flex-direction:column">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">Condición observada · +15–20 cm</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(19px,2.1vw,26px);letter-spacing:-.015em;text-transform:uppercase;margin:10px 0 0;color:#FAFBFD">La morsa sube el punto de sujeción</h3>
+          <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:12px 0 0;text-wrap:pretty">Montada sobre la mesa, la morsa desplaza la tarea por encima del plano del codo y obliga a abducción y elevación de hombro en cada apriete, sobre todo en operadores de menor estatura.</p>
+          <div style="margin-top:20px;flex:1;display:flex;align-items:flex-end;justify-content:center;min-height:300px;overflow:hidden">
+            <img src="assets/banco-morsa.webp" alt="Operador apretando una morsa montada sobre el banco, con hombro elevado" style="width:100%;max-width:280px;height:auto;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-8px) scale(1.03)" />
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;margin-top:24px">
+        <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);background:#1A1C1F;padding:32px;border-top:3px solid #E10600">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#FAFBFD">Punto de trabajo y altura del banco</h3>
+          <p style="font-size:15px;line-height:1.65;color:#C3C7CC;margin:14px 0 0;text-wrap:pretty">Los bancos de acero son de altura fija y la morsa montada sobre la mesa eleva el punto de sujeción de la pieza aproximadamente <strong style="color:#FAFBFD">15–20 cm</strong>. Esto sitúa la tarea por encima del plano óptimo del codo y obliga a abducción y elevación de hombro durante el ajuste manual, sobre todo en operadores de menor estatura.</p>
+        </div>
+        <div data-reveal="" data-delay="110" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);background:#1A1C1F;padding:32px;border-top:3px solid #6D6E71">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#FAFBFD">Recogida de piezas y flexión de tronco</h3>
+          <p style="font-size:15px;line-height:1.65;color:#C3C7CC;margin:14px 0 0;text-wrap:pretty">Las piezas cilíndricas maquinadas se colocan de pie sobre mesas bajas y en contenedores inferiores, lo que obliga a flexionar el tronco de forma repetida para tomarlas.</p>
+        </div>
+        <div data-reveal="" data-delay="220" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);background:#1A1C1F;padding:32px;border-top:3px solid #6D6E71">
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:#FAFBFD">Consolas y tornos</h3>
+          <p style="font-size:15px;line-height:1.65;color:#C3C7CC;margin:14px 0 0;text-wrap:pretty">Las alturas estandarizadas de mesas, tornos y consolas exigen flexión de tronco en operadores altos e hiperextensión de brazos en operadores bajos.</p>
+        </div>
+      </div>
+      <div data-reveal="" data-delay="300" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);margin-top:24px;background:linear-gradient(120deg,#AA0003,#5E0002);padding:clamp(28px,4vw,46px)">
+        <h3 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(20px,2.4vw,30px);letter-spacing:-.01em;text-transform:uppercase;margin:0;color:#FAFBFD">Aplicación práctica</h3>
+        <p style="font-size:clamp(16px,1.35vw,19px);line-height:1.6;color:#FFFFFF;margin:16px 0 0;max-width:80ch;text-wrap:pretty">Conviene ajustar la altura de contenedores y mesas auxiliares para mantener el agarre dentro del plano óptimo de trabajo —entre la cadera y el pecho— acomodando del <strong>percentil 5 al 95</strong> de la población laboral.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;color:#FFFFFF;border:1px solid rgba(255,255,255,.5);padding:8px 14px">ISO 7250-1 · medidas básicas del cuerpo</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;color:#FFFFFF;border:1px solid rgba(255,255,255,.5);padding:8px 14px">UNE-EN ISO 14738 · puestos con máquinas</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;color:#FFFFFF;border:1px solid rgba(255,255,255,.5);padding:8px 14px">UNE-EN 547 · alcances por percentil</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="normatividad" data-screen-label="Normatividad" style="position:relative;background:#FAFBFD;color:#22262B;padding:clamp(72px,10vw,130px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#AA0003">08 — Normatividad</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,48px);line-height:1;letter-spacing:-.028em;text-transform:uppercase;margin:0;color:#1A1C1F">Marco normativo aplicable</h2>
+      </div>
+
+      <h3 data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#6D6E71;margin:44px 0 0">Normas Oficiales Mexicanas · STPS</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px;margin-top:18px">
+        <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#1A1C1F;padding:28px" style-hover="transform:translateY(-5px)">
+          <span style="font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(19px,2vw,24px);letter-spacing:-.01em;color:#E10600;display:block">NOM-036-1-STPS-2018</span>
+          <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:12px 0 0;text-wrap:pretty">Factores de riesgo ergonómico en el trabajo. Parte 1: manejo manual de cargas.</p>
+          <p style="font-size:14px;line-height:1.55;color:#9DA2A8;margin:12px 0 0;font-style:italic">Norma ergonómica de aplicación directa: rige la manipulación de barras y piezas metálicas en el taller.</p>
+        </div>
+        <div data-reveal="" data-delay="110" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;padding:28px" style-hover="transform:translateY(-5px);border-color:#AA0003">
+          <span style="font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(19px,2vw,24px);letter-spacing:-.01em;color:#AA0003;display:block">NOM-006-STPS-2014</span>
+          <p style="font-size:15px;line-height:1.6;color:#3D4247;margin:12px 0 0;text-wrap:pretty">Manejo y almacenamiento de materiales; condiciones de seguridad y salud en el trabajo.</p>
+          <p style="font-size:14px;line-height:1.55;color:#6D6E71;margin:12px 0 0;font-style:italic">Aplica al manejo de materiales y estiba en almacén y banco.</p>
+        </div>
+        <div data-reveal="" data-delay="220" style="opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);background:#FFFFFF;border:1px solid #E3E7EB;padding:28px" style-hover="transform:translateY(-5px);border-color:#AA0003">
+          <span style="font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(19px,2vw,24px);letter-spacing:-.01em;color:#AA0003;display:block">NOM-017-STPS-2008</span>
+          <p style="font-size:15px;line-height:1.6;color:#3D4247;margin:12px 0 0;text-wrap:pretty">Equipo de protección personal: selección, uso y manejo en los centros de trabajo.</p>
+          <p style="font-size:14px;line-height:1.55;color:#6D6E71;margin:12px 0 0;font-style:italic">Respalda el uso de lentes, protección auditiva y calzado observado en el taller.</p>
+        </div>
+      </div>
+
+      <div id="hd-nom028" data-reveal="" data-delay="90" style="opacity:0;transform:translateY(30px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);margin-top:20px;background:#F0F2F5;border-left:3px solid #6D6E71;padding:24px 26px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6D6E71">Nota sobre la NOM-028-STPS</span>
+        <p style="font-size:15px;line-height:1.65;color:#3D4247;margin:10px 0 0;text-wrap:pretty">La NOM-028-STPS regula la seguridad en procesos y equipos críticos que manejan sustancias químicas peligrosas, ajena al giro y a los riesgos ergonómicos del taller metalmecánico. Se documenta su no pertinencia para este caso y se prioriza la NOM-036-1-STPS como norma ergonómica directa.</p>
+      </div>
+
+      <h3 data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#6D6E71;margin:56px 0 0">Cuadro comparativo · ISO 26800 vs. ISO 6385</h3>
+      <div data-reveal="" data-delay="80" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);margin-top:18px;overflow-x:auto;border:1px solid #E3E7EB;background:#FFFFFF">
+        <table style="width:100%;min-width:760px;border-collapse:collapse;font-size:15px">
+          <thead>
+            <tr>
+              <th style="text-align:left;font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#FAFBFD;background:#1A1C1F;padding:16px 20px;width:18%">Aspecto</th>
+              <th style="text-align:left;font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#FAFBFD;background:#AA0003;padding:16px 20px">ISO 26800:2011</th>
+              <th style="text-align:left;font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#FAFBFD;background:#6D6E71;padding:16px 20px">ISO 6385:2016</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#FFFFFF">
+              <td style="padding:18px 20px;font-family:Archivo,sans-serif;font-weight:700;color:#1A1C1F;border-top:1px solid #E3E7EB;vertical-align:top">Objetivo principal</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Marco conceptual general de principios ergonómicos aplicable a cualquier producto, sistema o servicio.</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Principios específicos para diseñar sistemas de trabajo seguros, saludables y eficientes.</td>
+            </tr>
+            <tr style="background:#F6F7F9">
+              <td style="padding:18px 20px;font-family:Archivo,sans-serif;font-weight:700;color:#1A1C1F;border-top:1px solid #E3E7EB;vertical-align:top">Enfoque</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Visión global y conceptual, aplicable a cualquier contexto (industrial, doméstico, público).</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Operativo, centrado en tareas, herramientas, equipo y condiciones del puesto.</td>
+            </tr>
+            <tr style="background:#FFFFFF">
+              <td style="padding:18px 20px;font-family:Archivo,sans-serif;font-weight:700;color:#1A1C1F;border-top:1px solid #E3E7EB;vertical-align:top">Alcance</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Abarca factores humanos, ambientales y organizacionales de manera general.</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Se limita a sistemas de trabajo y condiciones laborales seguras y eficientes.</td>
+            </tr>
+            <tr style="background:#F6F7F9">
+              <td style="padding:18px 20px;font-family:Archivo,sans-serif;font-weight:700;color:#1A1C1F;border-top:1px solid #E3E7EB;vertical-align:top">Principios clave</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Compatibilidad persona-sistema, prevención antes que corrección, mejora continua centrada en el usuario.</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Adaptación del trabajo a la persona, integración del factor humano, optimización de condiciones físicas y cognitivas.</td>
+            </tr>
+            <tr style="background:#FFFFFF">
+              <td style="padding:18px 20px;font-family:Archivo,sans-serif;font-weight:700;color:#1A1C1F;border-top:1px solid #E3E7EB;vertical-align:top">Factores considerados</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Antropometría, biomecánica, ergonomía cognitiva, factores ambientales, organización del trabajo.</td>
+              <td style="padding:18px 20px;line-height:1.55;color:#3D4247;border-top:1px solid #E3E7EB;vertical-align:top">Posturas, movimientos, fuerzas, carga física y mental, riesgos laborales, pausas y recuperación.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p data-reveal="" data-delay="140" style="opacity:0;transform:translateY(30px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);font-size:clamp(16px,1.3vw,19px);line-height:1.6;color:#1A1C1F;margin:26px 0 0;max-width:80ch;text-wrap:pretty"><strong>Lectura para Herraidea:</strong> la ISO 26800 justifica <em>por qué</em> se realiza el análisis —marco de principios— y la ISO 6385 guía <em>cómo</em> se rediseñan en concreto las estaciones de maquinado CNC y el banco de trabajo.</p>
+    </div>
+  </section>
+
+  <section id="evidencias" data-screen-label="Evidencias" style="position:relative;background:#101215;padding:clamp(72px,10vw,130px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E10600">09 — Evidencias</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,48px);line-height:1;letter-spacing:-.028em;text-transform:uppercase;margin:0;color:#FAFBFD">Registro fotográfico del taller</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px;margin-top:44px">
+        <figure data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);margin:0;background:#1A1C1F;overflow:hidden">
+          <div style="position:relative;height:340px;overflow:hidden">
+            <img src="assets/ev-cnc-morsa.jpeg" alt="Operador ajustando una barra en la morsa del centro de maquinado" style="width:100%;height:100%;object-fit:cover;object-position:50% 40%;transition:transform 1.1s cubic-bezier(.16,1,.3,1)" style-hover="transform:scale(1.07)" />
+            <span style="position:absolute;top:0;left:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:#FAFBFD;background:#AA0003;padding:8px 12px">Evidencia 1</span>
+          </div>
+          <figcaption style="padding:20px 22px;font-size:15px;line-height:1.55;color:#C3C7CC">Maquinado CNC y banco: ajuste manual de una barra metálica en la morsa del centro de maquinado vertical, con inclinación de tronco y agarre por encima del plano del codo.</figcaption>
+        </figure>
+        <figure data-reveal="" data-delay="110" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);margin:0;background:#1A1C1F;overflow:hidden">
+          <div style="position:relative;height:340px;overflow:hidden">
+            <img src="assets/ev-laser.jpeg" alt="Cabezal de corte láser de fibra en operación" style="width:100%;height:100%;object-fit:cover;object-position:50% 45%;transition:transform 1.1s cubic-bezier(.16,1,.3,1)" style-hover="transform:scale(1.07)" />
+            <span style="position:absolute;top:0;left:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:#FAFBFD;background:#AA0003;padding:8px 12px">Evidencia 2</span>
+          </div>
+          <figcaption style="padding:20px 22px;font-size:15px;line-height:1.55;color:#C3C7CC">Corte láser de fibra sobre cama de listones, con cabezal de corte y señalización de radiación láser; operador con protección auditiva y lentes de seguridad.</figcaption>
+        </figure>
+        <figure data-reveal="" data-delay="220" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);margin:0;background:#1A1C1F;overflow:hidden">
+          <div style="position:relative;height:340px;overflow:hidden">
+            <img src="assets/ev-piso-pulido.jpeg" alt="Piso de producción con estación de pulido y rebarbado" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;transition:transform 1.1s cubic-bezier(.16,1,.3,1)" style-hover="transform:scale(1.07)" />
+            <span style="position:absolute;top:0;left:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:#FAFBFD;background:#AA0003;padding:8px 12px">Evidencia 3</span>
+          </div>
+          <figcaption style="padding:20px 22px;font-size:15px;line-height:1.55;color:#C3C7CC">Piso de producción: estación de pulido y rebarbado con tapete antifatiga e inclinación de tronco, carros de piezas cortadas y tambor de viruta en primer plano.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="propuestas" data-screen-label="Propuestas antes/después" style="position:relative;background:#15181B;padding:clamp(72px,10vw,130px) 32px;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(80% 60% at 85% 10%,rgba(170,0,3,.24),transparent 60%)"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto">
+      <span data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E10600">10 — Propuestas de mejora</span>
+      <h2 data-reveal="" data-delay="80" style="opacity:0;transform:translateY(40px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1);font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(34px,5.6vw,80px);line-height:.95;letter-spacing:-.032em;text-transform:uppercase;margin:18px 0 0;color:#FAFBFD">Antes <span style="color:#6D6E71">/</span> Después</h2>
+      <p data-reveal="" data-delay="150" style="opacity:0;transform:translateY(30px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);font-size:clamp(16px,1.35vw,19px);line-height:1.6;color:#C3C7CC;margin:20px 0 0;max-width:70ch;text-wrap:pretty">Seis intervenciones sobre las estaciones de maquinado CNC y el banco de ajuste, cada una ligada al hallazgo que la origina.</p>
+
+      <div data-reveal="" data-delay="140" style="opacity:0;transform:translateY(44px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+        <div data-side="antes" style="background:#101215;padding:28px 28px 0;display:flex;flex-direction:column;transition:opacity .5s ease,filter .5s ease">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">Postura actual · Antes</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(20px,2.2vw,28px);letter-spacing:-.015em;text-transform:uppercase;margin:10px 0 0;color:#FAFBFD">Flexión de tronco sobre la mesa</h3>
+          <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:12px 0 0;text-wrap:pretty">El operador inclina el tronco y adelanta los hombros para alcanzar la pieza dentro del centro de maquinado: carga dorsolumbar sostenida y elevación de hombro en cada montaje.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#FAFBFD;background:#AA0003;padding:6px 11px">Riesgo lumbar</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#C3C7CC;border:1px solid #3A3E44;padding:6px 11px">Hombro elevado</span>
+          </div>
+          <div style="position:relative;margin-top:22px;flex:1;min-height:320px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden">
+            <img src="assets/postura-flexion.webp" alt="Operador con flexión de tronco frente al centro de maquinado" style="width:100%;max-width:340px;height:auto;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-8px) scale(1.03)" />
+          </div>
+        </div>
+        <div data-side="despues" style="background:#1A1C1F;padding:28px 28px 0;border-left:3px solid #E10600;display:flex;flex-direction:column;transition:opacity .5s ease,filter .5s ease">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">Postura corregida · Después</span>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(20px,2.2vw,28px);letter-spacing:-.015em;text-transform:uppercase;margin:10px 0 0;color:#FAFBFD">Tronco erguido y pieza al plano del codo</h3>
+          <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:12px 0 0;text-wrap:pretty">Con la pieza acercada al plano del codo y asistencia mecánica para la carga, el operador trabaja de pie con columna neutra y brazos dentro del alcance óptimo.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#FAFBFD;background:#2C3035;padding:6px 11px">Columna neutra</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#C3C7CC;border:1px solid #3A3E44;padding:6px 11px">Alcance óptimo</span>
+          </div>
+          <div style="position:relative;margin-top:22px;flex:1;min-height:320px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden">
+            <img src="assets/postura-neutra.webp" alt="Operador con postura erguida frente al centro de maquinado" style="width:100%;max-width:340px;height:auto;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-8px) scale(1.03)" />
+          </div>
+        </div>
+      </div>
+
+      <div id="hd-ab-toggle" style="display:flex;gap:8px;margin-top:32px;flex-wrap:wrap">
+        <button type="button" data-ab="ambos" style="font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#FAFBFD;background:#AA0003;border:1px solid #AA0003;padding:12px 20px;cursor:pointer;transition:all .3s">Comparar</button>
+        <button type="button" data-ab="antes" style="font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;background:transparent;border:1px solid #3A3E44;padding:12px 20px;cursor:pointer;transition:all .3s">Solo antes</button>
+        <button type="button" data-ab="despues" style="font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#C3C7CC;background:transparent;border:1px solid #3A3E44;padding:12px 20px;cursor:pointer;transition:all .3s">Solo después</button>
+      </div>
+
+      <div id="hd-ab-list" style="display:flex;flex-direction:column;gap:18px;margin-top:28px">
+
+        <div data-reveal="" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+          <div data-side="antes" style="background:#101215;padding:28px;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">01 · Antes</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Carga manual de barras</h3>
+            <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:10px 0 0;text-wrap:pretty">Levantamiento manual de barras sólidas metálicas hacia prensas y morsas del centro Haas, sin equipo de asistencia.</p>
+          </div>
+          <div data-side="despues" style="background:#1A1C1F;padding:28px;border-left:3px solid #E10600;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">01 · Después</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Asistencia mecánica para carga</h3>
+            <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:10px 0 0;text-wrap:pretty">Polipasto ligero o brazo de carga sobre los centros Haas —distinto del FlexArm existente, que es de roscado— para eliminar el levantamiento manual de barras de gran peso.</p>
+          </div>
+        </div>
+
+        <div data-reveal="" data-delay="70" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+          <div data-side="antes" style="background:#101215;padding:28px;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">02 · Antes</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Piezas al nivel del piso</h3>
+            <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:10px 0 0;text-wrap:pretty">Piezas cilíndricas en mesas bajas y contenedores inferiores: flexión de tronco repetida en cada toma.</p>
+          </div>
+          <div data-side="despues" style="background:#1A1C1F;padding:28px;border-left:3px solid #E10600;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">02 · Después</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Contenedores a la altura del agarre</h3>
+            <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:10px 0 0;text-wrap:pretty">Mesas de tijera regulables que elevan los contenedores al plano óptimo entre cadera y pecho, evitando la flexión frecuente de columna.</p>
+          </div>
+        </div>
+
+        <div data-reveal="" data-delay="140" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+          <div data-side="antes" style="background:#101215;padding:28px;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">03 · Antes</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Morsa 15–20 cm arriba del codo</h3>
+            <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:10px 0 0;text-wrap:pretty">La morsa sobre el banco fijo eleva la sujeción por encima del plano óptimo: abducción y elevación de hombro en cada ajuste.</p>
+          </div>
+          <div data-side="despues" style="background:#1A1C1F;padding:28px;border-left:3px solid #E10600;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">03 · Después</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Punto de trabajo al plano del codo</h3>
+            <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:10px 0 0;text-wrap:pretty">Revisión de la altura de bancos y morsas para acercar la tarea al codo, acomodando del percentil 5 al 95 conforme a ISO 14738 y EN 547.</p>
+          </div>
+        </div>
+
+        <div data-reveal="" data-delay="210" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+          <div data-side="antes" style="background:#101215;padding:28px;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">04 · Antes</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Tapetes solo en estaciones principales</h3>
+            <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:10px 0 0;text-wrap:pretty">Parte de las estaciones de bipedestación prolongada quedan sin superficie antifatiga.</p>
+          </div>
+          <div data-side="despues" style="background:#1A1C1F;padding:28px;border-left:3px solid #E10600;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">04 · Después</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Tapete antifatiga generalizado</h3>
+            <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:10px 0 0;text-wrap:pretty">Cobertura de todas las estaciones de bipedestación prolongada para reducir la fatiga en miembros inferiores.</p>
+          </div>
+        </div>
+
+        <div data-reveal="" data-delay="280" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+          <div data-side="antes" style="background:#101215;padding:28px;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">05 · Antes</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Vigilancia continua sin pausa</h3>
+            <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:10px 0 0;text-wrap:pretty">Ciclos largos de corte automatizado con atención sostenida: fatiga mental y tiempos de respuesta más lentos ante alertas.</p>
+          </div>
+          <div data-side="despues" style="background:#1A1C1F;padding:28px;border-left:3px solid #E10600;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">05 · Después</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Pausas activas 5 / 120 min</h3>
+            <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:10px 0 0;text-wrap:pretty">Programa de pausas activas de 5 minutos por cada 2 horas de trabajo repetitivo o de supervisión continua.</p>
+          </div>
+        </div>
+
+        <div data-reveal="" data-delay="350" style="opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;background:#2C3035;border:1px solid #2C3035">
+          <div data-side="antes" style="background:#101215;padding:28px;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8C9096">06 · Antes</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Puesto fijo en banco y rebarbado</h3>
+            <p style="font-size:15px;line-height:1.6;color:#9DA2A8;margin:10px 0 0;text-wrap:pretty">Sin rotación de tareas: fatiga acumulada hacia el final del turno y mayor riesgo de errores de calidad.</p>
+          </div>
+          <div data-side="despues" style="background:#1A1C1F;padding:28px;border-left:3px solid #E10600;transition:opacity .5s ease,filter .5s ease">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#E10600">06 · Después</span>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;margin:10px 0 0;color:#FAFBFD">Rotación programada de tareas</h3>
+            <p style="font-size:15px;line-height:1.6;color:#D6D9DD;margin:10px 0 0;text-wrap:pretty">Rotación entre banco de ajuste, rebarbado y montaje para distribuir la carga repetitiva a lo largo del turno.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Pausas activas" style="position:relative;background:#FAFBFD;color:#22262B;padding:clamp(64px,8vw,110px) 32px 0;overflow:hidden">
+    <div style="max-width:1240px;margin:0 auto">
+      <div data-reveal="" style="opacity:0;transform:translateY(36px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(20px,4vw,56px);align-items:end">
+        <div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#AA0003">Propuesta 05 en operación</span>
+          <h2 style="font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(32px,4.4vw,64px);line-height:.96;letter-spacing:-.032em;text-transform:uppercase;margin:16px 0 0;color:#1A1C1F;text-wrap:balance">Pausas activas<br /><span style="color:#AA0003">5 min por cada 2 h</span></h2>
+        </div>
+        <p style="font-size:clamp(16px,1.35vw,19px);line-height:1.66;color:#5B6167;margin:0;text-wrap:pretty">Rutina breve de movilidad de hombro, muñeca y columna en el propio puesto, dirigida al personal de maquinado CNC, banco y rebarbado. Interrumpe la bipedestación prolongada y la repetitividad antes de que la fatiga se acumule al final del turno.</p>
+      </div>
+      <div data-reveal="" data-delay="140" style="opacity:0;transform:translateY(44px);transition:opacity 1.05s cubic-bezier(.16,1,.3,1),transform 1.05s cubic-bezier(.16,1,.3,1);margin-top:clamp(24px,4vw,44px)">
+        <img src="assets/pausas-activas.webp" alt="Operadores realizando pausas activas junto al centro de maquinado" style="width:100%;height:auto;display:block" />
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Conclusiones" style="position:relative;background:linear-gradient(140deg,#AA0003 0%,#6E0002 55%,#3C0001 100%);padding:clamp(72px,10vw,140px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <span data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#FFFFFF">11 — Conclusiones</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(28px,5vw,64px);margin-top:24px;align-items:start">
+        <h2 data-reveal="" data-delay="80" style="opacity:0;transform:translateY(40px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1);font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(30px,4.2vw,60px);line-height:.98;letter-spacing:-.03em;text-transform:uppercase;margin:0;color:#FFFFFF;text-wrap:balance">Tecnología de punta, estaciones por ajustar</h2>
+        <div data-reveal="" data-delay="160" style="opacity:0;transform:translateY(40px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1)">
+          <p style="font-size:clamp(16px,1.4vw,20px);line-height:1.65;color:#FFFFFF;margin:0;text-wrap:pretty">El análisis ergonómico integral en Herraidea permite identificar que, si bien la empresa cuenta con tecnología de punta en maquinado CNC y corte láser y con una cultura de seguridad consolidada —EPP, protección auditiva y tapetes antifatiga—, persisten áreas de oportunidad clave en el manejo manual de cargas, las posturas en bipedestación y la adaptación antropométrica de las estaciones auxiliares.</p>
+          <p style="font-size:clamp(16px,1.4vw,20px);line-height:1.65;color:#FFFFFF;margin:20px 0 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.35);text-wrap:pretty">La alineación con la NOM-036-1-STPS y con los estándares ISO 26800 e ISO 6385 no solo previene trastornos musculoesqueléticos en los operadores: reduce la fatiga mental y optimiza los tiempos de ciclo y la productividad general del taller.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="referencias" data-screen-label="Referencias" style="position:relative;background:#101215;padding:clamp(64px,8vw,110px) 32px">
+    <div style="max-width:1240px;margin:0 auto">
+      <span data-reveal="" style="opacity:0;transform:translateY(30px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E10600">12 — Referencias · APA 7</span>
+      <div data-reveal="" data-delay="90" style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;margin-top:26px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.62;color:#9DA2A8">
+        <span style="padding:14px 0;border-top:1px solid #2C3035">International Organization for Standardization. (2011). <em style="color:#D6D9DD">Ergonomics — General approach, principles and concepts</em> (ISO 26800:2011).</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035">International Organization for Standardization. (2016). <em style="color:#D6D9DD">Ergonomic principles in the design of work systems</em> (ISO 6385:2016).</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035">International Organization for Standardization. (2017). <em style="color:#D6D9DD">Basic human body measurements for technological design — Part 1</em> (ISO 7250-1:2017).</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035">Asociación Española de Normalización. (2010). <em style="color:#D6D9DD">Seguridad de las máquinas. Requisitos antropométricos para el diseño de puestos de trabajo asociados a máquinas</em> (UNE-EN ISO 14738:2010).</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035">Asociación Española de Normalización. (2009). <em style="color:#D6D9DD">Seguridad de las máquinas. Medidas del cuerpo humano. Parte 3: Datos antropométricos</em> (UNE-EN 547-3:1997+A1:2008).</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035">Secretaría del Trabajo y Previsión Social. (2018). <em style="color:#D6D9DD">NOM-036-1-STPS-2018, Factores de riesgo ergonómico en el trabajo — Identificación, análisis, prevención y control. Parte 1: Manejo manual de cargas</em>. Diario Oficial de la Federación.</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035">Secretaría del Trabajo y Previsión Social. (2014). <em style="color:#D6D9DD">NOM-006-STPS-2014, Manejo y almacenamiento de materiales — Condiciones de seguridad y salud en el trabajo</em>. Diario Oficial de la Federación.</span>
+        <span style="padding:14px 0;border-top:1px solid #2C3035;border-bottom:1px solid #2C3035">Secretaría del Trabajo y Previsión Social. (2008). <em style="color:#D6D9DD">NOM-017-STPS-2008, Equipo de protección personal — Selección, uso y manejo en los centros de trabajo</em>. Diario Oficial de la Federación.</span>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#0A0B0D;padding:44px 32px;border-top:1px solid #2C3035">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px">
+      <img src="assets/logo-herraidea.png" alt="Herraidea" style="height:24px;width:auto;filter:brightness(0) invert(1);opacity:.85" />
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6D6E71">Avance de proyecto · Ergonomía Ocupacional</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6D6E71">Universidad La Salle Bajío · León, Gto.</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6D6E71;margin-left:auto">Septiembre 2026</span>
+    </div>
+  </footer>
+</div>
+
+<script src="./script.js" defer></script>
+</body>
+</html>
