@@ -1,0 +1,871 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Seguimiento en vivo · Herraidea</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<base href="/seguimiento/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Consola de cámara industrial: escenario de video a la izquierda, tablero de métodos a la derecha. Un solo tema oscuro, deliberado. */
+:root{
+  --bg:#0d1013; --panel:#14191e; --panel-2:#1a2027; --line:#28313a; --fg:#e7ebef; --muted:#8c98a4;
+  --brand:#e8722c; --steel:#9fb3c4;
+  --ok:#38d39f; --low:#9bd84a; --mid:#f2c84b; --high:#ff8a3d; --crit:#ff4d5e;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+.wrap{max-width:1480px;margin:0 auto;padding-block:18px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,40px);line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
+.sub{color:var(--muted);font-size:14px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+.seg button{all:unset;cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:9px 12px;color:var(--muted);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--brand);color:#1a0d04;font-weight:700}
+.seg button:hover:not([aria-pressed="true"]){color:var(--fg);background:var(--panel-2)}
+.btn{all:unset;cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:9px 13px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg)}
+.btn:hover{border-color:var(--steel)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#1a0d04;font-weight:700}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:16px;align-items:start}
+@media (max-width:1040px){.grid{grid-template-columns:minmax(0,1fr)}}
+.stage{position:relative;background:#050608;border:1px solid var(--line);border-radius:8px;overflow:hidden;aspect-ratio:16/10;max-width:100%}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage .status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:13px;color:var(--fg);background:rgba(10,13,16,.86);border:1px solid var(--line);padding:12px 16px;border-radius:6px;text-align:center;max-width:min(90%,460px)}
+.stagebar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.toggles{display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.toggles label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+input[type=checkbox]{accent-color:var(--brand);width:15px;height:15px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;min-width:0}
+.panel h2{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin:0;color:var(--steel)}
+.phead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.pbody{padding:14px}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.method{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--panel-2);position:relative;min-width:0}
+.method[aria-pressed="true"]{border-color:var(--fg)}
+.method .mname{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted)}
+.method .mscore{font-family:var(--display);font-weight:700;font-size:44px;line-height:.9;font-variant-numeric:tabular-nums}
+.method .mscore small{font-size:16px;color:var(--muted);font-weight:500}
+.chip{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:4px;color:#0b0d10;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.lv0{background:var(--ok)}.lv1{background:var(--low)}.lv2{background:var(--mid)}.lv3{background:var(--high)}.lv4{background:var(--crit)}
+.method .stripe{position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:0 0 6px 6px}
+.verdict{margin-top:12px;font-size:14px;color:var(--fg)}
+.verdict b{font-family:var(--display);font-size:17px;letter-spacing:.02em}
+table.bd{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+table.bd td{padding:6px 0;border-bottom:1px dashed var(--line);vertical-align:top}
+table.bd td:nth-child(2){color:var(--muted);padding-inline:8px}
+table.bd td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+table.bd tr.grp td{color:var(--steel);font-weight:700;border-bottom:1px solid var(--line);padding-top:12px;letter-spacing:.08em}
+table.bd tr.tot td{border-bottom:0;color:var(--fg);font-size:13.5px;padding-top:10px}
+.angles{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.ang{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;border-left-width:4px}
+.ang span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ang b{font-family:var(--mono);font-size:19px;font-variant-numeric:tabular-nums}
+.params{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+@media (max-width:520px){.params{grid-template-columns:minmax(0,1fr)}.trio{gap:6px}.method .mscore{font-size:34px}}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.field label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.field input[type=number],.field select,.field input[type=text]{font:inherit;font-family:var(--mono);background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:7px 9px;min-width:0}
+.checks{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px 14px;font-size:13.5px}
+.checks label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.checks label input{margin-top:3px;flex:none}
+.timeline canvas{width:100%;height:120px;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px}
+.dist{display:flex;height:10px;border-radius:3px;overflow:hidden;margin-top:10px;background:var(--panel-2)}
+.caps{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.cap{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.cap img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#000}
+.cap .cb{padding:8px 10px;display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.cap .row{display:flex;gap:6px;flex-wrap:wrap}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+.note{font-size:13px;color:var(--muted);max-width:75ch}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--muted)}
+.steps b{color:var(--fg);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<link rel="stylesheet" href="../seguimiento-herraidea.css" id="herraidea-theme">
+<div class="wrap">
+  <nav class="project-nav" aria-label="Navegación del proyecto"><a href="../" class="project-brand"><img src="../assets/logo-herraidea.png" alt="Herraidea"><span>ERGONOMÍA / LAB</span></a><a href="../#laboratorio">← Volver al reporte del segundo parcial</a></nav>
+  <div class="review-banner"><b>Herramienta académica de apoyo.</b> Las condiciones de tarea precargadas son valores de ejemplo: deben confirmarse para cada operación. Las estimaciones requieren revisión humana. La integración conserva el motor desarrollado con Claude; no constituye una validación de sus cálculos.</div>
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Ergonomía ocupacional · Evaluación postural en vivo</span>
+      <h1>Herraidea Pose Tracker</h1>
+      <span class="sub" id="ctx">Área de pulido · operador de pulidora de rodillo · herrajes de acero inoxidable 304</span>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Fuente de imagen">
+        <button id="srcPhoto" aria-pressed="true">Foto Herraidea</button>
+        <button id="srcVideo" aria-pressed="false">Subir video</button>
+        <button id="srcCam" aria-pressed="false">Cámara</button>
+      </div>
+      <input type="file" id="fileIn" accept="video/*,image/*" hidden>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section style="display:flex;flex-direction:column;gap:10px;min-width:0">
+      <div class="stage" id="stage">
+        <canvas id="cv"></canvas>
+        <div class="status" id="status">Cargando modelo de detección de pose…</div>
+      </div>
+      <div class="stagebar">
+        <div class="toggles">
+          <label><input type="checkbox" id="tFollow" checked> Seguimiento de cámara</label>
+          <label><input type="checkbox" id="tAngles" checked> Ángulos</label>
+          <label><input type="checkbox" id="tBox" checked> Caja de detección</label>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Lado evaluado">
+            <button id="sideAuto" aria-pressed="false">Auto</button>
+            <button id="sideR" aria-pressed="true">Der.</button>
+            <button id="sideL" aria-pressed="false">Izq.</button>
+          </div>
+          <button class="btn" id="playBtn" hidden>Pausa</button>
+          <button class="btn primary" id="capBtn">Capturar postura</button>
+        </div>
+      </div>
+      <p class="note" id="srcNote">Foto real del puesto de pulido. El modelo detecta 33 puntos del cuerpo, calcula los ángulos en 3D y puntúa los tres métodos en cada cuadro. Sube un video del ciclo de trabajo grabado con el celular para evaluarlo cuadro por cuadro.</p>
+    </section>
+
+    <aside class="side">
+      <div class="panel">
+        <div class="phead"><h2>Comparativo en vivo</h2><span class="eyebrow" id="fps" style="color:var(--muted)">—</span></div>
+        <div class="pbody">
+          <div class="trio">
+            <button class="method" data-m="rula" aria-pressed="false"><span class="mname">RULA</span><span class="mscore" id="sRULA">–<small>/7</small></span><span class="chip" id="cRULA">—</span><span class="stripe" id="bRULA"></span></button>
+            <button class="method" data-m="reba" aria-pressed="true"><span class="mname">REBA</span><span class="mscore" id="sREBA">–<small>/15</small></span><span class="chip" id="cREBA">—</span><span class="stripe" id="bREBA"></span></button>
+            <button class="method" data-m="owas" aria-pressed="false"><span class="mname">OWAS</span><span class="mscore" id="sOWAS">–<small>/4</small></span><span class="chip" id="cOWAS">—</span><span class="stripe" id="bOWAS"></span></button>
+          </div>
+          <p class="verdict" id="verdict">Esperando detección…</p>
+          <table class="bd" id="breakdown"></table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="phead"><h2>Ángulos medidos</h2><span class="eyebrow" style="color:var(--muted)" id="sideLbl">Lado derecho</span></div>
+        <div class="pbody"><div class="angles" id="angles"></div></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="grid">
+    <div class="panel timeline">
+      <div class="phead"><h2>Nivel de actuación en el tiempo</h2><button class="btn" id="clearHist">Reiniciar</button></div>
+      <div class="pbody">
+        <canvas id="tl"></canvas>
+        <div class="legend"><span><i style="background:#7fb2ff"></i>RULA</span><span><i style="background:var(--brand)"></i>REBA</span><span><i style="background:#c792ea"></i>OWAS</span><span id="histInfo">0 s registrados</span></div>
+        <div class="dist" id="dist" aria-label="Distribución del nivel REBA"></div>
+        <div class="legend" id="distLbl"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="phead"><h2>Condiciones de la tarea</h2></div>
+      <div class="pbody">
+        <div class="params">
+          <div class="field"><label for="pKg">Carga / fuerza (kg)</label><input type="number" id="pKg" value="1.5" min="0" step="0.5"></div>
+          <div class="field"><label for="pGrip">Agarre (REBA)</label>
+            <select id="pGrip"><option value="0">Bueno</option><option value="1" selected>Regular</option><option value="2">Malo</option><option value="3">Inaceptable</option></select></div>
+          <div class="checks">
+            <label><input type="checkbox" id="pStatic" checked> Postura estática &gt; 1 min</label>
+            <label><input type="checkbox" id="pRep" checked> Movimiento repetido &gt; 4/min</label>
+            <label><input type="checkbox" id="pRapid"> Cambios bruscos / base inestable</label>
+            <label><input type="checkbox" id="pDev" checked> Desviación o giro de muñeca</label>
+            <label><input type="checkbox" id="pTwistEnd"> Giro de muñeca en rango extremo</label>
+            <label><input type="checkbox" id="pRaised"> Hombro elevado</label>
+            <label><input type="checkbox" id="pSupport"> Brazo apoyado</label>
+            <label><input type="checkbox" id="pMid"> Trabaja cruzando la línea media</label>
+            <label><input type="checkbox" id="pShock"> Golpes o fuerza brusca</label>
+            <label><input type="checkbox" id="pWalk"> Caminando</label>
+            <label><input type="checkbox" id="pKneel"> Arrodillado</label>
+            <label><input type="checkbox" id="pSit"> Sentado</label>
+          </div>
+        </div>
+        <p class="note" style="margin-top:12px">Estos factores no se ven en una imagen; se fijan por observación del ciclo. Valores iniciales: pulido de piezas inox menores a 2 kg, sostenidas con agarre regular durante ciclos cortos y repetidos.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="phead"><h2>Posturas seleccionadas</h2>
+      <div class="controls"><button class="btn" id="csvBtn">Descargar CSV</button><button class="btn" id="copyBtn">Copiar tabla</button></div></div>
+    <div class="pbody"><div class="caps" id="caps"><p class="empty">Usa "Capturar postura" (o la barra espaciadora) en los momentos críticos del ciclo. Cada captura guarda la imagen, los ángulos y las tres puntuaciones.</p></div></div>
+  </div>
+
+  <div class="panel">
+    <div class="phead"><h2>Protocolo de aplicación</h2></div>
+    <div class="pbody">
+      <ol class="steps">
+        <li><b>Observar varios ciclos:</b> graba al operador al menos 3 ciclos completos y súbelo como video.</li>
+        <li><b>Seleccionar posturas:</b> captura las más críticas o las más frecuentes; la línea de tiempo muestra cuáles dominan.</li>
+        <li><b>Elegir el lado:</b> el lado que hace el esfuerzo; "Auto" toma el más visible para la cámara.</li>
+        <li><b>Tomar ángulos:</b> calculados en 3D a partir de 33 puntos corporales. Para cuello y tronco conviene grabar de perfil.</li>
+        <li><b>Puntuar segmentos y obtener niveles:</b> tablas A, B y C de RULA y REBA, y código de 4 dígitos de OWAS.</li>
+        <li><b>Definir medidas:</b> el nivel de actuación indica la urgencia; los segmentos en rojo indican dónde rediseñar.</li>
+      </ol>
+      <p class="note" style="margin-top:10px">Los ángulos son estimaciones de visión por computadora (MediaPipe Pose, Google) y sirven como apoyo a la observación directa; no sustituyen la medición con goniómetro.</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
+<script>
+// ===== Motor de puntuación RULA · REBA · OWAS =====
+const REBA_A = [ // [cuello][tronco][piernas]
+  [[1,2,3,4],[2,3,4,5],[2,4,5,6],[3,5,6,7],[4,6,7,8]],
+  [[1,2,3,4],[3,4,5,6],[4,5,6,7],[5,6,7,8],[6,7,8,9]],
+  [[3,3,5,6],[4,5,6,7],[5,6,7,8],[6,7,8,9],[7,8,9,9]],
+];
+const REBA_B = [ // [antebrazo][brazo][muñeca]
+  [[1,2,2],[1,2,3],[3,4,5],[4,5,5],[6,7,8],[7,8,8]],
+  [[1,2,3],[2,3,4],[4,5,5],[5,6,7],[7,8,8],[8,9,9]],
+];
+const REBA_C = [
+  [1,1,1,2,3,3,4,5,6,7,7,7],[1,2,2,3,4,4,5,6,6,7,7,8],[2,3,3,3,4,5,6,7,7,8,8,8],
+  [3,4,4,4,5,6,7,8,8,9,9,9],[4,4,4,5,6,7,8,8,9,9,9,9],[6,6,6,7,8,8,9,9,10,10,10,10],
+  [7,7,7,8,9,9,9,10,10,11,11,11],[8,8,8,9,10,10,10,10,10,11,11,11],[9,9,9,10,10,10,11,11,11,12,12,12],
+  [10,10,10,11,11,11,11,12,12,12,12,12],[11,11,11,11,12,12,12,12,12,12,12,12],[12,12,12,12,12,12,12,12,12,12,12,12],
+];
+const RULA_A = [ // fila = (brazo-1)*3+(antebrazo-1); col = (muñeca-1)*2+(giro-1)
+  [1,2,2,2,2,3,3,3],[2,2,2,2,3,3,3,3],[2,3,3,3,3,3,4,4],
+  [2,3,3,3,3,4,4,4],[3,3,3,3,3,4,4,4],[3,4,4,4,4,4,5,5],
+  [3,3,4,4,4,4,5,5],[3,4,4,4,4,4,5,5],[4,4,4,4,4,5,5,5],
+  [4,4,4,4,4,5,5,5],[4,4,4,4,4,5,5,5],[4,4,4,5,5,5,6,6],
+  [5,5,5,5,5,6,6,7],[5,6,6,6,6,7,7,7],[6,6,6,7,7,7,7,8],
+  [7,7,7,7,7,8,8,9],[8,8,8,8,8,9,9,9],[9,9,9,9,9,9,9,9],
+];
+const RULA_B = [ // [cuello][tronco*2 + piernas]
+  [1,3,2,3,3,4,5,5,6,6,7,7],[2,3,2,3,4,5,5,5,6,7,7,7],[3,3,3,4,4,5,5,6,6,7,7,7],
+  [5,5,5,6,6,7,7,7,7,7,8,8],[7,7,7,7,7,8,8,8,8,8,8,8],[8,8,8,8,8,8,8,9,9,9,9,9],
+];
+const RULA_C = [
+  [1,2,3,3,4,5,5],[2,2,3,4,4,5,5],[3,3,3,4,4,5,6],[3,3,3,4,5,6,6],
+  [4,4,4,5,6,7,7],[4,4,5,6,6,7,7],[5,5,6,6,7,7,7],[5,5,6,7,7,7,7],
+];
+const OWAS_T = [ // fila = (espalda-1)*3+(brazos-1); col = (piernas-1)*3+(carga-1)
+  [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,2,2,3,2,2,3,1,1,1,1,1,2],
+  [2,2,3,2,2,3,2,2,3,3,3,3,3,3,3,2,2,2,2,3,3],
+  [2,2,3,2,2,3,2,3,3,3,4,4,3,4,4,3,3,4,2,3,4],
+  [3,3,4,2,2,3,3,3,3,3,4,4,4,4,4,4,4,4,2,3,4],
+  [1,1,1,1,1,1,1,1,2,3,3,3,4,4,4,1,1,1,1,1,1],
+  [2,2,3,1,1,1,1,1,2,4,4,4,4,4,4,3,3,3,1,1,1],
+  [2,2,3,1,1,1,2,3,3,4,4,4,4,4,4,4,4,4,1,1,1],
+  [2,3,3,2,2,3,2,2,3,4,4,4,4,4,4,4,4,4,2,3,4],
+  [3,3,4,2,3,4,3,3,4,4,4,4,4,4,4,4,4,4,2,3,4],
+  [4,4,4,2,3,4,3,3,4,4,4,4,4,4,4,4,4,4,2,3,4],
+];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+function reba(g, p) {
+  const t = g.trunkFlex, ta = Math.abs(t);
+  let trunk = ta <= 5 ? 1 : (ta <= 20 ? 2 : ((t > 0 && t <= 60) || t < 0 ? 3 : 4));
+  const trunkAdj = (g.trunkSide > 10 || g.trunkTwist > 15) ? 1 : 0;
+  trunk = clamp(trunk + trunkAdj, 1, 5);
+  let neck = (g.neckFlex >= -5 && g.neckFlex <= 20) ? 1 : 2;
+  const neckAdj = g.neckSide > 15 ? 1 : 0;
+  neck = clamp(neck + neckAdj, 1, 3);
+  let legs = (p.sitting || p.walking || !g.unilateral) ? 1 : 2;
+  let kneeAdj = 0;
+  if (!p.sitting) { const k = g.kneeMax; kneeAdj = k > 60 ? 2 : (k >= 30 ? 1 : 0); }
+  legs = clamp(legs + kneeAdj, 1, 4);
+  const tA = REBA_A[neck - 1][trunk - 1][legs - 1];
+  const load = (p.kg < 5 ? 0 : p.kg <= 10 ? 1 : 2) + (p.shock ? 1 : 0);
+  const A = tA + load;
+  const u = g.uaFlex;
+  let ua = (u >= -20 && u <= 20) ? 1 : (u < -20 || u <= 45) ? 2 : (u <= 90 ? 3 : 4);
+  const uaAdj = (g.uaAbd > 30 ? 1 : 0) + (p.shoulderRaised ? 1 : 0) - (p.armSupported ? 1 : 0);
+  ua = clamp(ua + uaAdj, 1, 6);
+  const la = (g.laFlex >= 60 && g.laFlex <= 100) ? 1 : 2;
+  let wr = (g.wristFlex <= 15 ? 1 : 2) + (p.wristDev ? 1 : 0);
+  wr = clamp(wr, 1, 3);
+  const tB = REBA_B[la - 1][ua - 1][wr - 1];
+  const grip = +p.grip;
+  const B = tB + grip;
+  const tC = REBA_C[clamp(A, 1, 12) - 1][clamp(B, 1, 12) - 1];
+  const act = (p.static ? 1 : 0) + (p.repetitive ? 1 : 0) + (p.rapid ? 1 : 0);
+  const score = clamp(tC + act, 1, 15);
+  const level = score === 1 ? 0 : score <= 3 ? 1 : score <= 7 ? 2 : score <= 10 ? 3 : 4;
+  return { trunk, neck, legs, tA, load, A, ua, la, wr, tB, grip, B, tC, act, score, level,
+    seg: { trunk: trunk / 5, neck: neck / 3, legs: legs / 4, ua: ua / 6, la: la / 2, wr: wr / 3 } };
+}
+const REBA_LEVELS = [
+  ['Inapreciable', 'No es necesaria actuación'], ['Bajo', 'Puede ser necesaria la actuación'],
+  ['Medio', 'Es necesaria la actuación'], ['Alto', 'Es necesaria la actuación cuanto antes'],
+  ['Muy alto', 'Es necesaria la actuación de inmediato'],
+];
+
+function rula(g, p) {
+  const u = g.uaFlex;
+  let ua = (u >= -20 && u <= 20) ? 1 : (u < -20 || u <= 45) ? 2 : (u <= 90 ? 3 : 4);
+  ua = clamp(ua + (g.uaAbd > 30 ? 1 : 0) + (p.shoulderRaised ? 1 : 0) - (p.armSupported ? 1 : 0), 1, 6);
+  let la = (g.laFlex >= 60 && g.laFlex <= 100) ? 1 : 2;
+  la = clamp(la + (p.midline ? 1 : 0), 1, 3);
+  let wr = g.wristFlex <= 5 ? 1 : g.wristFlex <= 15 ? 2 : 3;
+  wr = clamp(wr + (p.wristDev ? 1 : 0), 1, 4);
+  const tw = p.wristTwistEnd ? 2 : 1;
+  const tA = RULA_A[(ua - 1) * 3 + (la - 1)][(wr - 1) * 2 + (tw - 1)];
+  const muscle = (p.static || p.repetitive) ? 1 : 0;
+  const force = (p.kg > 10 || p.shock) ? 3 : p.kg < 2 ? 0 : (p.static || p.repetitive) ? 2 : 1;
+  const C = clamp(tA + muscle + force, 1, 8);
+  const n = g.neckFlex;
+  let neck = n < -5 ? 4 : n <= 10 ? 1 : n <= 20 ? 2 : 3;
+  neck = clamp(neck + (g.neckSide > 15 ? 1 : 0), 1, 6);
+  const t = g.trunkFlex;
+  let trunk = Math.abs(t) <= 5 ? 1 : (t < 0 || t <= 20) ? 2 : t <= 60 ? 3 : 4;
+  trunk = clamp(trunk + (g.trunkTwist > 15 ? 1 : 0) + (g.trunkSide > 10 ? 1 : 0), 1, 6);
+  const legs = (p.sitting || !g.unilateral) ? 1 : 2;
+  const tB = RULA_B[neck - 1][(trunk - 1) * 2 + (legs - 1)];
+  const D = clamp(tB + muscle + force, 1, 7);
+  const score = RULA_C[C - 1][D - 1];
+  const level = score <= 2 ? 1 : score <= 4 ? 2 : score <= 6 ? 3 : 4;
+  return { ua, la, wr, tw, tA, muscle, force, C, neck, trunk, legs, tB, D, score, level,
+    seg: { trunk: trunk / 6, neck: neck / 6, legs: legs / 2, ua: ua / 6, la: la / 3, wr: wr / 4 } };
+}
+const RULA_LEVELS = [
+  null, ['Aceptable', 'Postura aceptable si no se mantiene ni repite por periodos largos'],
+  ['Investigar', 'Pueden requerirse cambios; investigar más a fondo'],
+  ['Cambiar pronto', 'Se requiere investigar y realizar cambios pronto'],
+  ['Cambiar ya', 'Se requieren cambios de inmediato'],
+];
+
+function owas(g, p) {
+  const bent = Math.abs(g.trunkFlex) > 20;
+  const twisted = g.trunkTwist > 20 || g.trunkSide > 20;
+  const back = bent && twisted ? 4 : twisted ? 3 : bent ? 2 : 1;
+  const arms = 1 + clamp(g.armsUp, 0, 2);
+  let legs;
+  if (p.sitting) legs = 1;
+  else if (p.walking) legs = 7;
+  else if (p.kneeling) legs = 6;
+  else if (g.kneeL > 30 && g.kneeR > 30 && !g.unilateral) legs = 4;
+  else if (g.unilateral && g.kneeMax > 30) legs = 5;
+  else if (g.unilateral) legs = 3;
+  else legs = 2;
+  const load = p.kg < 10 ? 1 : p.kg <= 20 ? 2 : 3;
+  const score = OWAS_T[(back - 1) * 3 + (arms - 1)][(legs - 1) * 3 + (load - 1)];
+  return { back, arms, legs, load, code: `${back}${arms}${legs}${load}`, score, level: score,
+    seg: { trunk: back / 4, ua: arms / 3, legs: legs >= 4 ? 1 : legs / 4 } };
+}
+const OWAS_LEVELS = [
+  null, ['Categoría 1', 'Postura normal, sin efectos dañinos; no requiere acción'],
+  ['Categoría 2', 'Posible efecto dañino; se requieren acciones correctivas en el futuro cercano'],
+  ['Categoría 3', 'Efectos dañinos; se requieren acciones correctivas lo antes posible'],
+  ['Categoría 4', 'Efectos sumamente dañinos; se requieren acciones correctivas de inmediato'],
+];
+const OWAS_NAMES = {
+  back: ['Recta', 'Doblada', 'Girada / inclinada lateral', 'Doblada y girada'],
+  arms: ['Ambos bajo el hombro', 'Uno a nivel/encima del hombro', 'Ambos a nivel/encima del hombro'],
+  legs: ['Sentado', 'De pie, piernas rectas', 'De pie, una pierna recta', 'De pie, rodillas flexionadas',
+    'De pie, una rodilla flexionada', 'Arrodillado', 'Caminando'],
+  load: ['< 10 kg', '10–20 kg', '> 20 kg'],
+};
+
+// ===== Geometría a partir de landmarks 3D de MediaPipe =====
+const V = {
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]],
+  mul: (a, s) => [a[0] * s, a[1] * s, a[2] * s],
+  dot: (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2],
+  cross: (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]],
+  len: (a) => Math.hypot(a[0], a[1], a[2]),
+  norm: (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; },
+  mid: (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2],
+};
+const DEG = 180 / Math.PI;
+function angleBetween(a, b) { return Math.acos(clamp(V.dot(V.norm(a), V.norm(b)), -1, 1)) * DEG; }
+function interior(a, b, c) { return angleBetween(V.sub(a, b), V.sub(c, b)); }
+
+// w: array de 33 landmarks world {x,y,z,visibility}; side: 'R' | 'L'
+function computeAngles(w, side) {
+  const P = (i) => [w[i].x, -w[i].y, -w[i].z]; // eje Y hacia arriba
+  const up = [0, 1, 0];
+  const shL = P(11), shR = P(12), hipL = P(23), hipR = P(24);
+  const shM = V.mid(shL, shR), hipM = V.mid(hipL, hipR), earM = V.mid(P(7), P(8)), nose = P(0);
+  const Lraw = V.sub(shR, shL);
+  const Lh = V.norm([Lraw[0], 0, Lraw[2]]);
+  let f = V.norm(V.cross(up, Lh));
+  if (V.dot(V.sub(nose, earM), f) < 0) f = V.mul(f, -1);
+  const trunk = V.sub(shM, hipM);
+  const trunkFlex = Math.atan2(V.dot(trunk, f), V.dot(trunk, up)) * DEG;
+  const trunkSide = Math.atan2(Math.abs(V.dot(trunk, Lh)), V.dot(trunk, up)) * DEG;
+  const hipLine = V.sub(hipR, hipL);
+  const trunkTwist = angleBetween([Lraw[0], 0, Lraw[2]], [hipLine[0], 0, hipLine[2]]);
+  const tU = V.norm(trunk);
+  let fT = V.sub(f, V.mul(tU, V.dot(f, tU))); fT = V.norm(fT);
+  let lT = V.sub(Lh, V.mul(tU, V.dot(Lh, tU))); lT = V.norm(lT);
+  const head = V.sub(earM, shM);
+  const neckFlex = Math.atan2(V.dot(head, fT), V.dot(head, tU)) * DEG;
+  const neckSide = Math.atan2(Math.abs(V.dot(head, lT)), V.dot(head, tU)) * DEG;
+  const s = side === 'R' ? { sh: 12, el: 14, wr: 16, pk: 18, ix: 20, hip: 24, kn: 26, an: 28, out: 1 }
+                         : { sh: 11, el: 13, wr: 15, pk: 17, ix: 19, hip: 23, kn: 25, an: 27, out: -1 };
+  const down = V.mul(tU, -1);
+  const outS = V.mul(lT, s.out);
+  const ua = V.sub(P(s.el), P(s.sh));
+  const uaFlex = Math.atan2(V.dot(ua, fT), V.dot(ua, down)) * DEG;
+  const uaAbd = Math.atan2(Math.max(0, V.dot(ua, outS)), Math.max(1e-6, V.dot(ua, down))) * DEG;
+  const laFlex = 180 - interior(P(s.sh), P(s.el), P(s.wr));
+  const hand = V.mid(P(s.pk), P(s.ix));
+  const wristFlex = angleBetween(V.sub(P(s.wr), P(s.el)), V.sub(hand, P(s.wr)));
+  const kneeL = 180 - interior(P(23), P(25), P(27));
+  const kneeR = 180 - interior(P(24), P(26), P(28));
+  const legLen = (V.len(V.sub(P(23), P(27))) + V.len(V.sub(P(24), P(28)))) / 2 || 0.8;
+  const unilateral = Math.abs(P(27)[1] - P(28)[1]) / legLen > 0.12;
+  const thighL = angleBetween(V.sub(P(25), P(23)), [0, -1, 0]);
+  const thighR = angleBetween(V.sub(P(26), P(24)), [0, -1, 0]);
+  let armsUp = 0;
+  for (const [sh, el, wr] of [[11, 13, 15], [12, 14, 16]]) {
+    if (Math.max(P(el)[1], P(wr)[1]) >= P(sh)[1]) armsUp++;
+  }
+  return {
+    trunkFlex, trunkSide, trunkTwist, neckFlex, neckSide, uaFlex, uaAbd, laFlex, wristFlex,
+    kneeL, kneeR, kneeMax: Math.max(kneeL, kneeR), unilateral, armsUp,
+    seated: thighL > 60 && thighR > 60,
+  };
+}
+
+if (typeof module !== 'undefined') module.exports = { reba, rula, owas, computeAngles };
+
+
+(() => {
+const $ = (id) => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+const tl = $('tl'), tctx = tl.getContext('2d');
+const LV_COL = ['#38d39f', '#9bd84a', '#f2c84b', '#ff8a3d', '#ff4d5e'];
+const MCOL = { rula: '#7fb2ff', reba: '#e8722c', owas: '#c792ea' };
+const MP_VER = '0.5.1675469404';
+const ASSET_BASE = (window.HERRAIDEA_ASSETS || 'mp/');
+
+// ---------- estado ----------
+const S = {
+  src: 'photo', media: null, w: 0, h: 0, side: 'R', method: 'reba',
+  lm: null, wl: null, angles: null, res: null, lastDetect: 0, fps: 0,
+  view: null, hist: [], caps: [], busy: false, lastVT: -1, ready: false, stream: null,
+};
+
+// ---------- parámetros ----------
+const P = () => ({
+  kg: parseFloat($('pKg').value) || 0, grip: +$('pGrip').value,
+  static: $('pStatic').checked, repetitive: $('pRep').checked, rapid: $('pRapid').checked,
+  wristDev: $('pDev').checked, wristTwistEnd: $('pTwistEnd').checked, shoulderRaised: $('pRaised').checked,
+  armSupported: $('pSupport').checked, midline: $('pMid').checked, shock: $('pShock').checked,
+  walking: $('pWalk').checked, kneeling: $('pKneel').checked, sitting: $('pSit').checked,
+});
+document.querySelectorAll('.params input,.params select').forEach(el => el.addEventListener('input', () => { if (S.angles) score(); }));
+
+// ---------- modelo ----------
+let pose = null;
+function status(msg) { const s = $('status'); s.hidden = !msg; if (msg) s.textContent = msg; }
+async function initModel() {
+  if (typeof Pose === 'undefined') { status('No se pudo cargar la librería de detección de pose. Revisa la conexión y recarga la página.'); return; }
+  try {
+    pose = new Pose({ locateFile: (f) => f.endsWith('.js')
+      ? `https://cdn.jsdelivr.net/npm/@mediapipe/pose@${MP_VER}/${f}` : ASSET_BASE + f + (f.endsWith('.wasm') ? '' : '.wasm') });
+    pose.setOptions({ modelComplexity: 1, smoothLandmarks: true, enableSegmentation: false,
+      minDetectionConfidence: 0.5, minTrackingConfidence: 0.5, selfieMode: false });
+    pose.onResults(onResults);
+    await pose.initialize();
+    S.ready = true;
+    status('');
+    if (S.src === 'photo' && S.media) detectStill();
+  } catch (e) {
+    console.error(e);
+    status('El modelo no pudo iniciar en este navegador (' + (e && e.message ? e.message : e) + ').');
+  }
+}
+
+function onResults(r) {
+  const now = performance.now();
+  if (S.lastDetect) S.fps = S.fps * 0.85 + (1000 / Math.max(1, now - S.lastDetect)) * 0.15;
+  S.lastDetect = now;
+  if (!r.poseLandmarks || !r.poseWorldLandmarks) {
+    S.lm = null; if (S.src !== 'photo') return; status('No se detectó a ninguna persona en la imagen.'); return;
+  }
+  status('');
+  S.lm = r.poseLandmarks; S.wl = r.poseWorldLandmarks;
+  S.angles = computeAngles(S.wl, pickSide());
+  score();
+  if (S.src !== 'photo') record();
+}
+
+function pickSide() {
+  if (S.side !== 'A') return S.side;
+  const v = (ids) => ids.reduce((a, i) => a + (S.lm[i].visibility || 0), 0);
+  const s = v([12, 14, 16]) >= v([11, 13, 15]) ? 'R' : 'L';
+  $('sideLbl').textContent = 'Auto · lado ' + (s === 'R' ? 'derecho' : 'izquierdo');
+  S.autoSide = s; return s;
+}
+
+function score() {
+  const p = P(), g = S.angles;
+  if (p.sitting) g.unilateral = false;
+  S.res = { reba: reba(g, p), rula: rula(g, p), owas: owas(g, p) };
+  renderPanel();
+}
+
+// ---------- fuentes ----------
+function setSrcBtn(id) { ['srcPhoto', 'srcVideo', 'srcCam'].forEach(b => $(b).setAttribute('aria-pressed', String(b === id))); }
+function stopStream() { if (S.stream) { S.stream.getTracks().forEach(t => t.stop()); S.stream = null; } }
+
+function loadPhoto(url, note) {
+  stopStream();
+  const img = new Image();
+  img.onload = () => {
+    S.src = 'photo'; S.media = img; S.w = img.naturalWidth; S.h = img.naturalHeight; S.view = null;
+    S.lm = null; $('playBtn').hidden = true;
+    if (note) $('srcNote').textContent = note;
+    if (S.ready) detectStill(); else if (!pose) status('Cargando modelo de detección de pose…');
+  };
+  img.onerror = () => status('No se pudo abrir la imagen.');
+  img.src = url;
+}
+async function detectStill() {
+  status('Analizando postura…');
+  try { for (let i = 0; i < 3; i++) await pose.send({ image: S.media }); }
+  catch (e) { console.error(e); status('Error al analizar la imagen.'); }
+}
+
+function loadVideo(file) {
+  stopStream();
+  const v = document.createElement('video');
+  v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+  v.src = URL.createObjectURL(file);
+  v.onloadeddata = () => {
+    S.src = 'video'; S.media = v; S.w = v.videoWidth; S.h = v.videoHeight; S.view = null; S.lastVT = -1;
+    S.hist = []; S.lm = null;
+    $('playBtn').hidden = false; $('playBtn').textContent = 'Pausa';
+    $('srcNote').textContent = 'Video: ' + file.name + '. Se evalúa cada cuadro mientras se reproduce; pausa y captura en los momentos críticos.';
+    v.play().catch(() => {});
+    if (!S.ready) status('Cargando modelo de detección de pose…');
+  };
+  v.onerror = () => status('El formato de video no es compatible con este navegador. Prueba con MP4 (H.264).');
+}
+
+async function startCam() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { camFail(); return; }
+  try {
+    stopStream();
+    const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.srcObject = st; S.stream = st;
+    await v.play();
+    S.src = 'cam'; S.media = v; S.w = v.videoWidth; S.h = v.videoHeight; S.view = null; S.hist = []; S.lm = null; S.lastVT = -1;
+    $('playBtn').hidden = true; setSrcBtn('srcCam');
+    $('srcNote').textContent = 'Cámara en vivo. Coloca la cámara a la altura de la cadera, a 2–4 m, con el cuerpo completo en cuadro.';
+    if (!S.ready) status('Cargando modelo de detección de pose…');
+  } catch (e) { console.warn(e); camFail(); }
+}
+function camFail() {
+  setSrcBtn(S.src === 'video' ? 'srcVideo' : 'srcPhoto');
+  $('srcNote').textContent = 'Este visor no permite usar la cámara. Para seguimiento en vivo, abre la versión publicada en el sitio web de Herraidea (HTTPS). Aquí puedes subir un video del celular.';
+}
+
+$('srcPhoto').onclick = () => { setSrcBtn('srcPhoto'); loadPhoto('herraidea-pulido.jpg', 'Foto real del puesto de pulido. El modelo detecta 33 puntos del cuerpo, calcula los ángulos en 3D y puntúa los tres métodos.'); };
+$('srcVideo').onclick = () => $('fileIn').click();
+$('srcCam').onclick = startCam;
+$('fileIn').onchange = (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.type.startsWith('image/')) { setSrcBtn('srcVideo'); loadPhoto(URL.createObjectURL(f), 'Imagen: ' + f.name); }
+  else { setSrcBtn('srcVideo'); loadVideo(f); }
+  e.target.value = '';
+};
+$('playBtn').onclick = () => { const v = S.media; if (!v || S.src !== 'video') return; if (v.paused) { v.play(); $('playBtn').textContent = 'Pausa'; } else { v.pause(); $('playBtn').textContent = 'Reproducir'; } };
+for (const [id, val, lbl] of [['sideAuto', 'A', 'Auto'], ['sideR', 'R', 'Lado derecho'], ['sideL', 'L', 'Lado izquierdo']]) {
+  $(id).onclick = () => {
+    S.side = val; ['sideAuto', 'sideR', 'sideL'].forEach(b => $(b).setAttribute('aria-pressed', String(b === id)));
+    $('sideLbl').textContent = lbl;
+    if (S.wl) { S.angles = computeAngles(S.wl, pickSide()); score(); }
+  };
+}
+document.querySelectorAll('.method').forEach(b => b.onclick = () => {
+  S.method = b.dataset.m; document.querySelectorAll('.method').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderPanel();
+});
+
+// ---------- bucle ----------
+async function pump() {
+  const m = S.media;
+  if (S.ready && !S.busy && m && (S.src === 'video' || S.src === 'cam') && m.readyState >= 2 && m.currentTime !== S.lastVT) {
+    S.busy = true; S.lastVT = m.currentTime;
+    try { await pose.send({ image: m }); } catch (e) { console.error(e); }
+    S.busy = false;
+  }
+}
+function frame() { pump(); draw(); requestAnimationFrame(frame); }
+
+// ---------- dibujo ----------
+const CONN = [[11,12],[11,23],[12,24],[23,24],[11,13],[13,15],[12,14],[14,16],[15,17],[15,19],[16,18],[16,20],[23,25],[25,27],[27,31],[24,26],[26,28],[28,32],[27,29],[28,30]];
+function segOf(a, b, side) {
+  const R = side === 'R';
+  const arm = R ? [12,14,16,18,20] : [11,13,15,17,19];
+  if ((a === 11 && b === 23) || (a === 12 && b === 24) || (a === 11 && b === 12) || (a === 23 && b === 24)) return 'trunk';
+  if (arm.includes(a) && arm.includes(b)) { if (a === arm[0]) return 'ua'; if (a === arm[1]) return 'la'; return 'wr'; }
+  if (a >= 23 && b >= 25) return 'legs';
+  return null;
+}
+function riskCol(x) { return x == null ? '#9fb3c4' : x <= 0.25 ? LV_COL[0] : x <= 0.45 ? LV_COL[1] : x <= 0.65 ? LV_COL[2] : x <= 0.85 ? LV_COL[3] : LV_COL[4]; }
+
+function resize() {
+  const r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  const W = Math.round(r.width * d), H = Math.round(r.height * d);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const t = tl.getBoundingClientRect();
+  if (tl.width !== Math.round(t.width * d)) { tl.width = Math.round(t.width * d); tl.height = Math.round(t.height * d); drawTimeline(); }
+}
+
+function targetView() {
+  const CW = cv.width, CH = cv.height, ar = CW / CH;
+  let full; { let vh = S.h, vw = vh * ar; if (vw < S.w) { vw = S.w; vh = vw / ar; } full = { x: S.w / 2, y: S.h / 2, h: vh }; }
+  if (!$('tFollow').checked || !S.lm) return full;
+  let x0 = 1, y0 = 1, x1 = 0, y1 = 0;
+  for (const p of S.lm) { if ((p.visibility ?? 1) < 0.3) continue; x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); }
+  if (x1 <= x0) return full;
+  const bw = (x1 - x0) * S.w, bh = (y1 - y0) * S.h;
+  let h = Math.max(bh * 1.32, (bw * 1.6) / ar);
+  h = Math.min(h, full.h);
+  return { x: (x0 + x1) / 2 * S.w + bw * 0.12, y: (y0 + y1) / 2 * S.h, h };
+}
+
+function draw() {
+  resize();
+  const CW = cv.width, CH = cv.height, d = CW / Math.max(1, cv.getBoundingClientRect().width);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#050608'; ctx.fillRect(0, 0, CW, CH);
+  if (!S.media || !S.w) return;
+  const tv = targetView();
+  if (!S.view) S.view = { ...tv };
+  const k = 0.08;
+  S.view.x += (tv.x - S.view.x) * k; S.view.y += (tv.y - S.view.y) * k; S.view.h += (tv.h - S.view.h) * k;
+  const sc = CH / S.view.h, ox = CW / 2 - S.view.x * sc, oy = CH / 2 - S.view.y * sc;
+  ctx.setTransform(sc, 0, 0, sc, ox, oy);
+  ctx.filter = 'brightness(0.78) saturate(0.85)';
+  try { ctx.drawImage(S.media, 0, 0, S.w, S.h); } catch (e) {}
+  ctx.filter = 'none';
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const T = (p) => [p.x * S.w * sc + ox, p.y * S.h * sc + oy];
+
+  if (S.lm && S.res) {
+    const side = S.side === 'A' ? (S.autoSide || 'R') : S.side;
+    const seg = S.res[S.method].seg;
+    const lm = S.lm;
+    if ($('tBox').checked) {
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      for (const p of lm) { if ((p.visibility ?? 1) < 0.3) continue; const [x, y] = T(p); x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+      const pad = 18 * d; x0 -= pad; y0 -= pad * 2.2; x1 += pad; y1 += pad;
+      ctx.strokeStyle = 'rgba(56,211,159,.35)'; ctx.lineWidth = 1 * d; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+      ctx.strokeStyle = '#38d39f'; ctx.lineWidth = 3 * d; const L = 22 * d;
+      for (const [x, y, sx, sy] of [[x0, y0, 1, 1], [x1, y0, -1, 1], [x0, y1, 1, -1], [x1, y1, -1, -1]]) {
+        ctx.beginPath(); ctx.moveTo(x + sx * L, y); ctx.lineTo(x, y); ctx.lineTo(x, y + sy * L); ctx.stroke();
+      }
+      const tag = `ID 01 · OPERADOR · ${S.method.toUpperCase()} ${S.res[S.method].score}`;
+      ctx.font = `700 ${12 * d}px "JetBrains Mono", monospace`;
+      const tw = ctx.measureText(tag).width;
+      ctx.fillStyle = '#38d39f'; ctx.fillRect(x0, y0 - 22 * d, tw + 14 * d, 20 * d);
+      ctx.fillStyle = '#06110c'; ctx.fillText(tag, x0 + 7 * d, y0 - 8 * d);
+    }
+    // huesos
+    for (const [a, b] of CONN) {
+      const pa = lm[a], pb = lm[b];
+      if ((pa.visibility ?? 1) < 0.25 || (pb.visibility ?? 1) < 0.25) continue;
+      const sg = segOf(a, b, side);
+      const col = riskCol(sg && seg[sg] != null ? seg[sg] : (sg === 'trunk' ? seg.trunk : null));
+      const evald = sg && sg !== 'legs' ? 1 : 0.75;
+      const [x1, y1] = T(pa), [x2, y2] = T(pb);
+      ctx.globalAlpha = evald;
+      ctx.strokeStyle = col; ctx.lineCap = 'round';
+      ctx.lineWidth = 9 * d; ctx.globalAlpha = 0.18 * evald; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      ctx.lineWidth = 3.4 * d; ctx.globalAlpha = evald; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    // cuello: hombro medio -> oreja media
+    const mid = (i, j) => ({ x: (lm[i].x + lm[j].x) / 2, y: (lm[i].y + lm[j].y) / 2 });
+    const shM = mid(11, 12), earM = mid(7, 8), hipM = mid(23, 24);
+    const neckCol = riskCol(seg.neck);
+    { const [x1, y1] = T(shM), [x2, y2] = T(earM); ctx.strokeStyle = neckCol; ctx.lineWidth = 3.4 * d; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+    { const [x1, y1] = T(hipM), [x2, y2] = T(shM); ctx.strokeStyle = riskCol(seg.trunk); ctx.setLineDash([6 * d, 5 * d]); ctx.lineWidth = 2 * d; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]); }
+    // puntos
+    for (const i of [0, 7, 8, 11, 12, 13, 14, 15, 16, 19, 20, 23, 24, 25, 26, 27, 28, 31, 32]) {
+      const p = lm[i]; if ((p.visibility ?? 1) < 0.25) continue;
+      const [x, y] = T(p);
+      ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.beginPath(); ctx.arc(x, y, 8 * d, 0, 7); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5 * d; ctx.beginPath(); ctx.arc(x, y, 4.2 * d, 0, 7); ctx.fill(); ctx.stroke();
+    }
+    // etiquetas de ángulo
+    if ($('tAngles').checked) {
+      const g = S.angles, R = side === 'R';
+      const lbl = (pt, txt, col, dx) => {
+        const [x, y] = T(pt);
+        ctx.font = `700 ${12.5 * d}px "JetBrains Mono", monospace`;
+        const w = ctx.measureText(txt).width + 14 * d, h = 22 * d;
+        const bx = dx > 0 ? x + 14 * d : x - 14 * d - w, by = y - h / 2;
+        ctx.strokeStyle = col; ctx.lineWidth = 1.2 * d; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(dx > 0 ? bx : bx + w, y); ctx.stroke();
+        ctx.fillStyle = 'rgba(8,11,14,.86)'; ctx.fillRect(bx, by, w, h);
+        ctx.fillStyle = col; ctx.fillRect(dx > 0 ? bx : bx + w - 3 * d, by, 3 * d, h);
+        ctx.fillStyle = '#fff'; ctx.fillText(txt, bx + 8 * d, by + 15.5 * d);
+      };
+      const out = R ? 1 : -1;
+      const fmt = (v) => `${Math.round(v)}°`;
+      lbl(earM, `CUELLO ${fmt(g.neckFlex)}`, neckCol, -out);
+      lbl({ x: (shM.x + hipM.x) / 2, y: (shM.y + hipM.y) / 2 }, `TRONCO ${fmt(g.trunkFlex)}`, riskCol(seg.trunk), -out);
+      lbl(lm[R ? 12 : 11], `BRAZO ${fmt(g.uaFlex)}`, riskCol(seg.ua), out);
+      lbl(lm[R ? 14 : 13], `CODO ${fmt(g.laFlex)}`, riskCol(seg.la), out);
+      if (seg.wr != null) lbl(lm[R ? 16 : 15], `MUÑECA ${fmt(g.wristFlex)}`, riskCol(seg.wr), out);
+      lbl(lm[R ? 26 : 25], `RODILLA ${fmt(R ? g.kneeR : g.kneeL)}`, riskCol(seg.legs), out);
+    }
+  }
+  // HUD
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(0, 0, CW, 30 * d);
+  const live = S.src !== 'photo';
+  if (!live || Math.floor(performance.now() / 500) % 2 === 0) { ctx.fillStyle = live ? '#ff4d5e' : '#9fb3c4'; ctx.beginPath(); ctx.arc(16 * d, 15 * d, 5 * d, 0, 7); ctx.fill(); }
+  ctx.font = `700 ${12 * d}px "JetBrains Mono", monospace`;
+  ctx.fillStyle = live ? '#ff4d5e' : '#9fb3c4'; ctx.fillText(S.src === 'cam' ? 'EN VIVO' : S.src === 'video' ? 'VIDEO' : 'FOTO', 28 * d, 19.5 * d);
+  ctx.fillStyle = '#e7ebef'; ctx.fillText('HERRAIDEA · PULIDO · POSE TRACKING', 100 * d, 19.5 * d);
+  let rt = `ZOOM ${(S.view ? (Math.max(S.h, S.w / (CW / CH)) / S.view.h) : 1).toFixed(2)}x`;
+  if (S.src === 'video' && S.media) { const t = S.media.currentTime; rt = `TC ${String(Math.floor(t / 60)).padStart(2, '0')}:${(t % 60).toFixed(1).padStart(4, '0')}  ` + rt; }
+  ctx.font = `400 ${12 * d}px "JetBrains Mono", monospace`;
+  const rw = ctx.measureText(rt).width;
+  if (CW - rw - 14 * d > 380 * d) { ctx.fillStyle = '#c7d2db'; ctx.fillText(rt, CW - rw - 14 * d, 19.5 * d); }
+  $('fps').textContent = S.src === 'photo' ? 'Imagen fija' : `${Math.round(S.fps)} cuadros/s`;
+}
+
+// ---------- panel ----------
+function setCard(key, r, max, lvLabel, lvIdx) {
+  $('s' + key).innerHTML = `${r.score}<small>/${max}</small>`;
+  const c = $('c' + key); c.className = 'chip lv' + lvIdx; c.textContent = lvLabel;
+  $('b' + key).style.background = LV_COL[lvIdx];
+}
+const owasIdx = (s) => [0, 0, 2, 3, 4][s];
+const rulaIdx = (s) => [0, 0, 2, 3, 4][s];
+function renderPanel() {
+  const { reba: E, rula: U, owas: O } = S.res;
+  setCard('REBA', E, 15, `Nivel ${E.level} · ${REBA_LEVELS[E.level][0]}`, E.level);
+  setCard('RULA', U, 7, `Nivel ${U.level} · ${RULA_LEVELS[U.level][0]}`, rulaIdx(U.level));
+  setCard('OWAS', O, 4, `Cat. ${O.score} · ${O.code}`, owasIdx(O.score));
+  const g = S.angles, f = (v) => `${Math.round(v)}°`;
+  let rows = [], v = '';
+  if (S.method === 'reba') {
+    v = `<b>REBA ${E.score} · riesgo ${REBA_LEVELS[E.level][0].toLowerCase()}.</b> ${REBA_LEVELS[E.level][1]}.`;
+    rows = [['g', 'GRUPO A'], ['Tronco', `flexión ${f(g.trunkFlex)}${g.trunkSide > 10 || g.trunkTwist > 15 ? ' + giro/incl.' : ''}`, E.trunk],
+      ['Cuello', `flexión ${f(g.neckFlex)}`, E.neck], ['Piernas', `${g.unilateral ? 'apoyo unilateral' : 'apoyo bilateral'} · rodilla ${f(g.kneeMax)}`, E.legs],
+      ['Tabla A', '', E.tA], ['Carga / fuerza', `${P().kg} kg`, '+' + E.load], ['Puntuación A', '', E.A],
+      ['g', 'GRUPO B'], ['Brazo', `flexión ${f(g.uaFlex)}${g.uaAbd > 30 ? ' + abducción' : ''}`, E.ua],
+      ['Antebrazo', `flexión ${f(g.laFlex)}`, E.la], ['Muñeca', `${f(g.wristFlex)}${P().wristDev ? ' + desviación' : ''}`, E.wr],
+      ['Tabla B', '', E.tB], ['Agarre', ['bueno', 'regular', 'malo', 'inaceptable'][E.grip], '+' + E.grip], ['Puntuación B', '', E.B],
+      ['g', 'RESULTADO'], ['Tabla C', '', E.tC], ['Actividad', 'estática · repetitiva · brusca', '+' + E.act], ['t', 'REBA final', E.score]];
+  } else if (S.method === 'rula') {
+    v = `<b>RULA ${U.score} · nivel ${U.level}.</b> ${RULA_LEVELS[U.level][1]}.`;
+    rows = [['g', 'GRUPO A · BRAZO Y MUÑECA'], ['Brazo', `flexión ${f(g.uaFlex)}`, U.ua], ['Antebrazo', `flexión ${f(g.laFlex)}`, U.la],
+      ['Muñeca', `${f(g.wristFlex)}${P().wristDev ? ' + desviación' : ''}`, U.wr], ['Giro de muñeca', U.tw === 2 ? 'rango extremo' : 'rango medio', U.tw],
+      ['Tabla A', '', U.tA], ['Uso muscular', '', '+' + U.muscle], ['Fuerza / carga', `${P().kg} kg`, '+' + U.force], ['Puntuación C', '', U.C],
+      ['g', 'GRUPO B · CUELLO, TRONCO, PIERNAS'], ['Cuello', `flexión ${f(g.neckFlex)}`, U.neck], ['Tronco', `flexión ${f(g.trunkFlex)}`, U.trunk],
+      ['Piernas', g.unilateral ? 'sin apoyo equilibrado' : 'apoyadas', U.legs], ['Tabla B', '', U.tB], ['Uso muscular + fuerza', '', '+' + (U.muscle + U.force)], ['Puntuación D', '', U.D],
+      ['t', 'RULA final (tabla C)', U.score]];
+  } else {
+    v = `<b>OWAS código ${O.code} · categoría ${O.score}.</b> ${OWAS_LEVELS[O.score][1]}.`;
+    rows = [['g', 'CÓDIGO DE POSTURA'], ['Espalda', OWAS_NAMES.back[O.back - 1], O.back], ['Brazos', OWAS_NAMES.arms[O.arms - 1], O.arms],
+      ['Piernas', OWAS_NAMES.legs[O.legs - 1], O.legs], ['Carga', OWAS_NAMES.load[O.load - 1], O.load], ['t', 'Categoría de acción', O.score]];
+  }
+  $('verdict').innerHTML = v;
+  $('breakdown').innerHTML = rows.map(r => r[0] === 'g' ? `<tr class="grp"><td colspan="3">${r[1]}</td></tr>`
+    : r[0] === 't' ? `<tr class="tot"><td>${r[1]}</td><td></td><td>${r[2]}</td></tr>` : `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+  const seg = S.res[S.method].seg;
+  const side = S.side === 'A' ? (S.autoSide || 'R') : S.side;
+  const A = [['Cuello', g.neckFlex, seg.neck], ['Tronco', g.trunkFlex, seg.trunk], ['Brazo', g.uaFlex, seg.ua], ['Antebrazo', g.laFlex, seg.la],
+    ['Muñeca', g.wristFlex, seg.wr], ['Rodilla', side === 'R' ? g.kneeR : g.kneeL, seg.legs], ['Incl. tronco', g.trunkSide, null], ['Giro tronco', g.trunkTwist, null]];
+  $('angles').innerHTML = A.map(([n, val, s]) => `<div class="ang" style="border-left-color:${riskCol(s)}"><span>${n}</span><b>${Math.round(val)}°</b></div>`).join('');
+}
+
+// ---------- historial ----------
+function record() {
+  const t = performance.now();
+  const last = S.hist[S.hist.length - 1];
+  if (last && t - last.t < 200) return;
+  S.hist.push({ t, rula: S.res.rula.level, reba: S.res.reba.level, owas: S.res.owas.score });
+  if (S.hist.length > 900) S.hist.shift();
+  drawTimeline();
+}
+$('clearHist').onclick = () => { S.hist = []; drawTimeline(); };
+function drawTimeline() {
+  const W = tl.width, H = tl.height, d = W / Math.max(1, tl.getBoundingClientRect().width);
+  tctx.setTransform(1, 0, 0, 1, 0, 0); tctx.clearRect(0, 0, W, H);
+  const padL = 26 * d, padR = 8 * d, padT = 8 * d, padB = 8 * d;
+  const y = (lv) => padT + (H - padT - padB) * (1 - lv / 4);
+  tctx.font = `${10 * d}px "JetBrains Mono", monospace`; tctx.fillStyle = '#8c98a4';
+  for (let l = 0; l <= 4; l++) { tctx.strokeStyle = 'rgba(159,179,196,.12)'; tctx.lineWidth = 1; tctx.beginPath(); tctx.moveTo(padL, y(l)); tctx.lineTo(W - padR, y(l)); tctx.stroke(); tctx.fillText(String(l), 8 * d, y(l) + 3.5 * d); }
+  const h = S.hist;
+  if (h.length < 2) {
+    tctx.fillStyle = '#8c98a4'; tctx.fillText(S.src === 'photo' ? 'Sube un video o usa la cámara para registrar el ciclo.' : 'Registrando…', padL + 8 * d, H / 2);
+    $('histInfo').textContent = '0 s registrados'; $('dist').innerHTML = ''; $('distLbl').innerHTML = ''; return;
+  }
+  const t0 = h[0].t, t1 = h[h.length - 1].t, x = (t) => padL + (W - padL - padR) * (t - t0) / Math.max(1, t1 - t0);
+  for (const [k, off] of [['owas', 2], ['rula', 0], ['reba', -2]]) {
+    tctx.strokeStyle = MCOL[k]; tctx.lineWidth = 2 * d; tctx.beginPath();
+    h.forEach((p, i) => { const yy = y(p[k]) + off * d; if (i === 0) tctx.moveTo(x(p.t), yy); else { tctx.lineTo(x(p.t), y(h[i - 1][k]) + off * d); tctx.lineTo(x(p.t), yy); } });
+    tctx.stroke();
+  }
+  $('histInfo').textContent = `${((t1 - t0) / 1000).toFixed(0)} s registrados`;
+  const cnt = [0, 0, 0, 0, 0]; h.forEach(p => cnt[p.reba]++);
+  $('dist').innerHTML = cnt.map((c, i) => c ? `<span style="flex:${c};background:${LV_COL[i]}"></span>` : '').join('');
+  $('distLbl').innerHTML = 'REBA · tiempo por nivel: ' + cnt.map((c, i) => c ? `<span>N${i} ${Math.round(c / h.length * 100)}%</span>` : '').join('');
+}
+
+// ---------- capturas ----------
+function capture() {
+  if (!S.res) return;
+  const th = document.createElement('canvas'); th.width = 480; th.height = 300;
+  th.getContext('2d').drawImage(cv, 0, 0, th.width, th.height);
+  const g = S.angles;
+  const c = { n: S.caps.length + 1, img: th.toDataURL('image/jpeg', 0.82), src: S.src,
+    t: S.src === 'video' ? S.media.currentTime : null, side: S.side === 'A' ? (S.autoSide || 'R') : S.side,
+    g: { ...g }, reba: S.res.reba.score, rebaL: S.res.reba.level, rula: S.res.rula.score, rulaL: S.res.rula.level, owas: S.res.owas.code, owasC: S.res.owas.score };
+  S.caps.push(c); renderCaps();
+}
+function renderCaps() {
+  if (!S.caps.length) return;
+  $('caps').innerHTML = S.caps.map(c => `<div class="cap"><img src="${c.img}" alt="Postura ${c.n}"><div class="cb">
+    <div>POSTURA ${c.n}${c.t != null ? ' · t=' + c.t.toFixed(1) + ' s' : ''} · lado ${c.side === 'R' ? 'der.' : 'izq.'}</div>
+    <div class="row"><span class="chip lv${rulaIdx(c.rulaL)}">RULA ${c.rula}</span><span class="chip lv${c.rebaL}">REBA ${c.reba}</span><span class="chip lv${owasIdx(c.owasC)}">OWAS ${c.owas}</span></div>
+    <div>Cuello ${Math.round(c.g.neckFlex)}° · Tronco ${Math.round(c.g.trunkFlex)}° · Brazo ${Math.round(c.g.uaFlex)}° · Codo ${Math.round(c.g.laFlex)}° · Muñeca ${Math.round(c.g.wristFlex)}°</div></div></div>`).join('');
+}
+$('capBtn').onclick = capture;
+document.addEventListener('keydown', (e) => { if (e.code === 'Space' && !/INPUT|SELECT|BUTTON|TEXTAREA/.test(e.target.tagName)) { e.preventDefault(); capture(); } });
+function csv() {
+  const head = 'postura,tiempo_s,lado,cuello,tronco,incl_tronco,giro_tronco,brazo,antebrazo,muneca,rodilla_izq,rodilla_der,RULA,nivel_RULA,REBA,nivel_REBA,OWAS_codigo,OWAS_categoria';
+  return [head].concat(S.caps.map(c => [c.n, c.t != null ? c.t.toFixed(1) : '', c.side, ...['neckFlex', 'trunkFlex', 'trunkSide', 'trunkTwist', 'uaFlex', 'laFlex', 'wristFlex', 'kneeL', 'kneeR'].map(k => Math.round(c.g[k])),
+    c.rula, c.rulaL, c.reba, c.rebaL, "'" + c.owas, c.owasC].join(','))).join('\n');
+}
+$('csvBtn').onclick = async () => {
+  if (!S.caps.length) { $('csvBtn').textContent = 'Sin capturas'; setTimeout(() => $('csvBtn').textContent = 'Descargar CSV', 1500); return; }
+  try {
+    const dl = window.claude ? await window.claude.use('downloads') : null;
+    if (dl) { await dl.save({ filename: 'posturas_herraidea.csv', data: '﻿' + csv() }); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv()], { type: 'text/csv' })); a.download = 'posturas_herraidea.csv'; a.click();
+  } catch (e) { console.warn(e); }
+};
+$('copyBtn').onclick = async () => {
+  const txt = csv().replace(/,/g, '\t');
+  try { await navigator.clipboard.writeText(txt); $('copyBtn').textContent = 'Copiado'; }
+  catch (e) { $('copyBtn').textContent = 'No disponible'; }
+  setTimeout(() => $('copyBtn').textContent = 'Copiar tabla', 1500);
+};
+
+// ---------- arranque ----------
+window.addEventListener('resize', () => drawTimeline());
+loadPhoto('herraidea-pulido.jpg');
+requestAnimationFrame(frame);
+initModel();
+drawTimeline();
+})();
+</script>
+
+</body></html>

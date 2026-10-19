@@ -1,0 +1,1 @@
+Modelos suministrados en Herraidea Pose Tracker.zip. JavaScript original conservado. Estos archivos son necesarios para la ejecución del seguimiento.
