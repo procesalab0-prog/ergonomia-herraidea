@@ -114,9 +114,10 @@ table.bd tr.tot td{border-bottom:0;color:var(--fg);font-size:13.5px;padding-top:
 
   <div class="grid">
     <section style="display:flex;flex-direction:column;gap:10px;min-width:0">
-      <div class="stage" id="stage">
+      <div class="stage" id="stage" role="region" aria-label="Visor de seguimiento">
         <canvas id="cv"></canvas>
         <div class="status" id="status">Cargando modelo de detección de pose…</div>
+        <button type="button" class="btn viewer-expand" id="expandViewer" aria-controls="stage" aria-expanded="false">⛶ Pantalla completa</button>
       </div>
       <div class="stagebar">
         <div class="toggles">
@@ -868,4 +869,5 @@ drawTimeline();
 })();
 </script>
 
+<script src="visor.js"></script>
 </body></html>
