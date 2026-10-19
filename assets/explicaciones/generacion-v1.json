@@ -1,0 +1,40 @@
+{
+  "generator": "Herramienta integrada image_gen",
+  "format": "PNG RGBA, fondo transparente",
+  "purpose": "Ilustraciones explicativas, no evidencia de campo ni mediciones",
+  "date": "2026-10-19",
+  "assets": [
+    {
+      "file": "rula-herraidea-v1.png",
+      "prompt": "Use case: scientific-educational. Create a standalone PNG illustration for an academic Spanish ergonomics website about Herraidea, stainless-steel hardware manufacturing. GENUINELY TRANSPARENT background with alpha, isolated people and equipment, no white rectangle, no checkered background drawn into the image, no room, no walls, no background floor plane. Reference image 1 provides the semi-realistic photographic-cutout style and steel/charcoal machinery. Reference image 2 provides the actual green industrial polishing-machine geometry. Keep machinery plausible and recognizable. Steel grey, charcoal workwear, restrained Herraidea red accents #E10600, subtle red anatomical guide marks, refined technical educational illustration with realistic proportions, all objects fully within frame with generous transparent margin. No words, letters, numbers, scores, logos, or watermark. Not a clinical measurement or a claim of real field findings. Never show loose gloves near rotating machinery. One worker in charcoal polo and safety glasses at a stainless steel workbench assembling a small hinge, three-quarter side view, upper body and entire bench legs visible. Bent elbow and neutral wrist; emphasize upper arm, forearm and wrist with three thin red leader arcs without labels. Show precise manual assembly, NOT a spinning machine. Square composition.",
+      "reference_roles": [
+        "Estilo del primer parcial: operario y torno CNC",
+        "Geometría de la pulidora real de Herraidea"
+      ]
+    },
+    {
+      "file": "reba-herraidea-v1.png",
+      "prompt": "Use case: scientific-educational. Create a standalone PNG illustration for an academic Spanish ergonomics website about Herraidea, stainless-steel hardware manufacturing. GENUINELY TRANSPARENT background with alpha, isolated people and equipment, no white rectangle, no checkered background drawn into the image, no room, no walls, no background floor plane. Reference image 1 provides the semi-realistic photographic-cutout style and steel/charcoal machinery. Reference image 2 provides the actual green industrial polishing-machine geometry. Keep machinery plausible and recognizable. Steel grey, charcoal workwear, restrained Herraidea red accents #E10600, subtle red anatomical guide marks, refined technical educational illustration with realistic proportions, all objects fully within frame with generous transparent margin. No words, letters, numbers, scores, logos, or watermark. Not a clinical measurement or a claim of real field findings. Never show loose gloves near rotating machinery. Full-body side/rear three-quarter view of a worker standing at the green two-wheel polishing machine from reference 2, preserve its green rectangular bed, blue and buff polishing wheels on a horizontal shaft and four sturdy legs. Worker wears snug dark polo, dark trousers, closed safety shoes, safety glasses, no gloves, no loose clothing; hands hold a small metal hinge close to the wheel, task shown at rest with no rotation streaks. Thin red joint dots and line segments show shoulder/elbow/hip/knee, without diagram angles or values. Complete worker and complete machine visible. Square composition.",
+      "reference_roles": [
+        "Estilo del primer parcial: operario y torno CNC",
+        "Geometría de la pulidora real de Herraidea"
+      ]
+    },
+    {
+      "file": "owas-herraidea-v1.png",
+      "prompt": "Use case: scientific-educational. Create a standalone PNG illustration for an academic Spanish ergonomics website about Herraidea, stainless-steel hardware manufacturing. GENUINELY TRANSPARENT background with alpha, isolated people and equipment, no white rectangle, no checkered background drawn into the image, no room, no walls, no background floor plane. Reference image 1 provides the semi-realistic photographic-cutout style and steel/charcoal machinery. Reference image 2 provides the actual green industrial polishing-machine geometry. Keep machinery plausible and recognizable. Steel grey, charcoal workwear, restrained Herraidea red accents #E10600, subtle red anatomical guide marks, refined technical educational illustration with realistic proportions, all objects fully within frame with generous transparent margin. No words, letters, numbers, scores, logos, or watermark. Not a clinical measurement or a claim of real field findings. Never show loose gloves near rotating machinery. Three chronological full-body views of the SAME charcoal-clad worker at a Herraidea steel hinge workstation, arranged clearly left to right: standing straight inspecting a small hinge near waist height; bending slightly to pick a small hinge from an elevated tray; standing again placing hinge onto worktable. Three compact non-overlapping isolated vignettes connected by two thin red curved arrows. No spinning machinery. Long wide composition, no text, no numeric posture classifications, no exaggerated dangerous pose.",
+      "reference_roles": [
+        "Estilo del primer parcial: operario y torno CNC",
+        "Geometría de la pulidora real de Herraidea"
+      ]
+    },
+    {
+      "file": "lest-herraidea-v1.png",
+      "prompt": "Use case: scientific-educational. Create a standalone PNG illustration for an academic Spanish ergonomics website about Herraidea, stainless-steel hardware manufacturing. GENUINELY TRANSPARENT background with alpha, isolated people and equipment, no white rectangle, no checkered background drawn into the image, no room, no walls, no background floor plane. Reference image 1 provides the semi-realistic photographic-cutout style and steel/charcoal machinery. Reference image 2 provides the actual green industrial polishing-machine geometry. Keep machinery plausible and recognizable. Steel grey, charcoal workwear, restrained Herraidea red accents #E10600, subtle red anatomical guide marks, refined technical educational illustration with realistic proportions, all objects fully within frame with generous transparent margin. No words, letters, numbers, scores, logos, or watermark. Not a clinical measurement or a claim of real field findings. Never show loose gloves near rotating machinery. An isolated Herraidea workstation for explaining whole-workplace conditions: worker with safety glasses checking a small stainless hinge on a grey metal bench, enclosed grey CNC lathe in rear/right, a task lamp, parts trays and a second worker listening nearby. CNC door shut, no hands inside machine. Five small subtle pictograms float around the workstation: thermometer, sound wave, light bulb, human figure and clock. Red pictograms, no letters, no numbers, no gauges with readings. Wide composition with entire workstation and both people visible, a single coherent scene.",
+      "reference_roles": [
+        "Estilo del primer parcial: operario y torno CNC",
+        "Geometría de la pulidora real de Herraidea"
+      ]
+    }
+  ]
+}
