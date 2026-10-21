@@ -1,0 +1,290 @@
+{
+  "date": "2026-10-21",
+  "method": "Revisión visual académica de ocho capturas por archivo; transcripción de rótulos visibles, sin recálculo independiente.",
+  "duration_total_seconds": 67.76,
+  "not_estimated": [
+    "identidad",
+    "productividad",
+    "porcentaje de exposición",
+    "ciclos completos",
+    "carga y fuerza",
+    "agarre",
+    "nivel RULA",
+    "categoría OWAS",
+    "puntuación LEST"
+  ],
+  "cases": [
+    {
+      "id": 1,
+      "title": "Interacción frente al CNC",
+      "duration": 7.5,
+      "recorded": "13:55:00",
+      "times": [
+        0.22,
+        1.12,
+        2.1,
+        3,
+        3.98,
+        4.88,
+        5.85,
+        6.83
+      ],
+      "scores": [
+        6,
+        5,
+        7,
+        7,
+        6,
+        6,
+        6,
+        5
+      ],
+      "time": 2.1,
+      "score": 7,
+      "neck": 28,
+      "trunk": 4,
+      "wrist": 38,
+      "description": "Operario de pie frente a un torno CNC, con cambios de orientación y manipulación cerca del área de trabajo.",
+      "finding": "Se observa orientación de cabeza hacia la tarea y cambios del brazo y la muñeca. El encuadre se desplaza y algunos puntos distales quedan próximos al borde.",
+      "proposal": "Revisar ubicación de piezas y visibilidad de la tarea; contrastar una toma lateral estable sin interferir con los resguardos.",
+      "samples": [
+        {
+          "time_seconds": 0.22,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 1.12,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 2.1,
+          "reba_displayed": 7
+        },
+        {
+          "time_seconds": 3,
+          "reba_displayed": 7
+        },
+        {
+          "time_seconds": 3.98,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 4.88,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 5.85,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 6.83,
+          "reba_displayed": 5
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Herramienta y sujeción en morsa",
+      "duration": 16.78,
+      "recorded": "13:55:54",
+      "times": [
+        0.5,
+        2.52,
+        4.7,
+        6.71,
+        8.89,
+        10.91,
+        13.09,
+        15.27
+      ],
+      "scores": [
+        5,
+        4,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "time": 10.91,
+      "score": 6,
+      "neck": 40,
+      "trunk": 15,
+      "wrist": 14,
+      "description": "Trabajo de pie sobre una pieza sujeta en morsa, con herramienta sostenida verticalmente y atención visual dirigida al punto de operación.",
+      "finding": "La captura de 10,91 s muestra inclinación de cabeza hacia la pieza; el programa indica cuello 40° y tronco 15°. Son estimaciones superpuestas, no mediciones independientes.",
+      "proposal": "Ensayar un ajuste de altura u orientación del punto de sujeción y acercar la pieza, previa revisión técnica de estabilidad y seguridad.",
+      "samples": [
+        {
+          "time_seconds": 0.5,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 2.52,
+          "reba_displayed": 4
+        },
+        {
+          "time_seconds": 4.7,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 6.71,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 8.89,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 10.91,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 13.09,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 15.27,
+          "reba_displayed": 6
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Sujeción y operación con careta",
+      "duration": 42.3,
+      "recorded": "13:56:56",
+      "times": [
+        1.27,
+        6.34,
+        11.84,
+        16.92,
+        22.42,
+        27.49,
+        32.99,
+        38.49
+      ],
+      "scores": [
+        5,
+        6,
+        5,
+        7,
+        5,
+        5,
+        5,
+        5
+      ],
+      "time": 32.99,
+      "score": 5,
+      "neck": 29,
+      "trunk": 6,
+      "wrist": 27,
+      "description": "Secuencia de preparación de una pieza sujeta y operación con careta, en la que se aprecia un destello de arco.",
+      "finding": "Se observan cambios de alcance y orientación de la cabeza. La careta oculta referencias faciales y el arco altera la imagen; el ángulo de cuello requiere especial cautela.",
+      "proposal": "Revisar la orientación de la pieza y los alcances, y validar el seguimiento en una toma controlada. Los riesgos del proceso requieren su propia evaluación.",
+      "samples": [
+        {
+          "time_seconds": 1.27,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 6.34,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 11.84,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 16.92,
+          "reba_displayed": 7
+        },
+        {
+          "time_seconds": 22.42,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 27.49,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 32.99,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 38.49,
+          "reba_displayed": 5
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Vista breve de operación en máquina",
+      "duration": 1.18,
+      "recorded": "14:01:01",
+      "times": [
+        0.04,
+        0.18,
+        0.33,
+        0.47,
+        0.63,
+        0.77,
+        0.92,
+        1.07
+      ],
+      "scores": [
+        5,
+        5,
+        7,
+        7,
+        6,
+        5,
+        7,
+        5
+      ],
+      "time": 0.47,
+      "score": 7,
+      "neck": 22,
+      "trunk": -9,
+      "wrist": 36,
+      "description": "Toma posterior de un operario frente al área de control de una máquina, con el modo de visor ampliado visible.",
+      "finding": "La duración de 1,18 s permite documentar el funcionamiento del visor, pero no un ciclo, una postura sostenida ni repetitividad.",
+      "proposal": "Registrar una secuencia más larga con cámara fija antes de utilizarla para caracterizar la exposición.",
+      "samples": [
+        {
+          "time_seconds": 0.04,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 0.18,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 0.33,
+          "reba_displayed": 7
+        },
+        {
+          "time_seconds": 0.47,
+          "reba_displayed": 7
+        },
+        {
+          "time_seconds": 0.63,
+          "reba_displayed": 6
+        },
+        {
+          "time_seconds": 0.77,
+          "reba_displayed": 5
+        },
+        {
+          "time_seconds": 0.92,
+          "reba_displayed": 7
+        },
+        {
+          "time_seconds": 1.07,
+          "reba_displayed": 5
+        }
+      ]
+    }
+  ]
+}

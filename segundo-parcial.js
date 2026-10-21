@@ -58,6 +58,34 @@
   });
   addEventListener('pagehide', () => { urls.forEach(url => URL.revokeObjectURL(url)); urls.clear(); });
   const state = new Map();
+  // Navega al instante documentado sin reiniciar ni recalcular el seguimiento.
+  document.querySelectorAll('[data-video][data-time]').forEach(button => {
+    button.addEventListener('click', () => {
+      const video = document.getElementById(button.dataset.video);
+      const status = button.closest('.field-card').querySelector('.video-state');
+      const seek = () => {
+        video.pause();
+        video.currentTime = Math.min(Number(button.dataset.time), video.duration || Infinity);
+        status.textContent = `Captura seleccionada: ${Number(button.dataset.time).toFixed(2)} s. Pulsa reproducir para ver la secuencia.`;
+      };
+      if (video.readyState >= 1) seek();
+      else {
+        status.textContent = 'Cargando el instante seleccionado…';
+        video.addEventListener('loadedmetadata', seek, { once: true });
+        video.load();
+      }
+      video.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+      video.focus({ preventScroll: true });
+    });
+  });
+  document.querySelectorAll('.field-card video').forEach(video => {
+    video.addEventListener('play', () => {
+      document.querySelectorAll('.field-card video').forEach(other => { if (other !== video) other.pause(); });
+    });
+    video.addEventListener('error', () => {
+      video.closest('.field-card').querySelector('.video-state').textContent = 'No se pudo cargar el video. Prueba el enlace de descarga MP4.';
+    });
+  });
   addEventListener('beforeprint', () => document.querySelectorAll('details').forEach(el => { state.set(el, el.open); el.open = true; }));
   addEventListener('afterprint', () => { state.forEach((open, el) => { el.open = open; }); state.clear(); });
   document.getElementById('print-report').addEventListener('click', () => window.print());
